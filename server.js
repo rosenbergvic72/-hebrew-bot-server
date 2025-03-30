@@ -16,17 +16,24 @@ function normalize(text) {
 }
 
 app.post('/ask', async (req, res) => {
+  console.log('📥 Получен запрос от клиента:', req.body); // Лог всего тела запроса
+
   const { question } = req.body;
+
+  if (!question) {
+    console.warn('⚠️ Вопрос не передан!');
+    return res.status(400).json({ reply: 'Вопрос не передан' });
+  }
+
   const key = normalize(question);
 
-  if (!question) return res.status(400).json({ reply: 'Вопрос не передан' });
-
   if (cache.has(key)) {
-    console.log('Ответ из кеша');
+    console.log('💾 Ответ из кеша');
     return res.json({ reply: cache.get(key) });
   }
 
   try {
+    console.log('🔗 Отправка запроса в OpenAI...');
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
@@ -49,16 +56,23 @@ app.post('/ask', async (req, res) => {
       }
     );
 
-    const reply = response.data.choices[0].message.content;
+    const reply = response.data.choices?.[0]?.message?.content;
+
+    if (!reply) {
+      console.warn('⚠️ OpenAI вернул пустой ответ!');
+      return res.status(500).json({ reply: 'Пустой ответ от ChatGPT' });
+    }
+
     cache.set(key, reply);
+    console.log('✅ Ответ получен от OpenAI');
     res.json({ reply });
   } catch (error) {
-    console.error('Ошибка запроса:', error.response?.data || error.message);
+    console.error('❌ Ошибка запроса к OpenAI:', error.response?.data || error.message);
     res.status(500).json({ reply: 'Ошибка при запросе к ChatGPT' });
   }
 });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Сервер работает: http://localhost:${PORT}`);
+  console.log(`🚀 Сервер работает: http://localhost:${PORT}`);
 });
