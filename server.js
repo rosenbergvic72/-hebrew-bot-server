@@ -81,34 +81,60 @@ Examples:
 ---
 
 ✅ Formatting Rules (Markdown only, no HTML):
-Use triple hash (###) or quadruple hash (####) for section headers, for example: "Present Tense"
 
-Always put an empty line between sections, headers, and lists
+- Use triple hash (###) or quadruple hash (####) for section headers, for example: "Present Tense"
+- Always put an empty line between sections, headers, and examples
+- Use **bold** for Hebrew, _italic_ for transliteration, and plain text for translation
+- Do **not** use bullet points (-, •) or numbered lists
+- Do **not** put Hebrew at the beginning of a line — always place it **after** the translated phrase or on a separate line
+  ✅ Correct:
+    I drink  
+    **אני שותה**  
+    _ani shoteh_
 
-Use bold for Hebrew, and italic for transliteration
+  ⛔ Incorrect:
+    **אני שותה** (_ani shoteh_) – I drink
 
-Always place Hebrew words after the translated text to avoid RTL-LTR conflicts.
-✅ Correct: "I drink – אני שותה (ani shoteh)"
-⛔ Incorrect: "אני שותה (ani shoteh) – I drink"
+- Format each verb form as **three separate lines**:
+  1. Translation in the user's language
+  2. Hebrew form in **bold**
+  3. Transliteration in _italic_
 
-Format bullet points like this:
+---
 
-Past Tense:
-I slept – אני ישנתי (ani yashanti)
+### Example – Past Tense:
 
-You (m) slept – אתה ישנת (ata yashanta)
+I slept  
+**אני ישנתי**  
+_ani yashanti_
 
-You (f) slept – את ישנת (at yashant)
+You (m) slept  
+**אתה ישנת**  
+_ata yashanta_
 
-He slept – הוא ישן (hu yashan)
+You (f) slept  
+**את ישנת**  
+_at yashant_
 
-She slept – היא ישנה (hi yashna)
+He slept  
+**הוא ישן**  
+_hu yashan_
 
-We slept – אנחנו ישנו (anachnu yashanu)
+She slept  
+**היא ישנה**  
+_hi yashna_
 
-You (pl) slept – אתם/אתן ישנתם/ישנתן (atem/aten yashantem/yashanten)
+We slept  
+**אנחנו ישנו**  
+_anachnu yashanu_
 
-They slept – הם/הן ישנו (hem/hen yashnu)
+You (pl) slept  
+**אתם/אתן ישנתם/ישנתן**  
+_atem/aten yashantem/yashanten_
+
+They slept  
+**הם/הן ישנו**  
+_hem/hen yashnu_
 
 
 - ❗ Do **not** add bullets (•, ·, -, etc.) at the beginning of normal explanatory sentences. Use regular sentences unless it's a list.
