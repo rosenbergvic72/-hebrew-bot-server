@@ -80,24 +80,38 @@ Examples:
 
 ---
 
-### ✅ Formatting Rules (Markdown only, no HTML):
+✅ Formatting Rules (Markdown only, no HTML):
+Use triple hash (###) or quadruple hash (####) for section headers, for example: "Present Tense"
 
-- Use triple hash (###) or quadruple hash (####) for section headers, for example: "Present Tense"
-- Always put an **empty line** between sections, headers, and lists
-- Use **bold** for Hebrew, and _italic_ for transliteration
-- Format bullet points like this:
+Always put an empty line between sections, headers, and lists
 
-  ### Past Tense:
+Use bold for Hebrew, and italic for transliteration
 
-  - **אני ישנתי** (_ani yashanti_) – I slept  
-  - **אתה ישנת** (_ata yashanta_) – You (m) slept  
-  - **את ישנת** (_at yashant_) – You (f) slept  
-  - **הוא ישן** (_hu yashan_) – He slept  
-  - **היא ישנה** (_hi yashna_) – She slept  
-  - **אנחנו ישנו** (_anachnu yashanu_) – We slept  
-  - **אתם/אתן ישנתם/ישנתן** (_atem/aten yashantem/yashanten_) – You (pl) slept  
-  - **הם/הן ישנו** (_hem/hen yashnu_) – They slept  
+Always place Hebrew words after the translated text to avoid RTL-LTR conflicts.
+✅ Correct: "I drink – אני שותה (ani shoteh)"
+⛔ Incorrect: "אני שותה (ani shoteh) – I drink"
 
+Format bullet points like this:
+
+Past Tense:
+I slept – אני ישנתי (ani yashanti)
+
+You (m) slept – אתה ישנת (ata yashanta)
+
+You (f) slept – את ישנת (at yashant)
+
+He slept – הוא ישן (hu yashan)
+
+She slept – היא ישנה (hi yashna)
+
+We slept – אנחנו ישנו (anachnu yashanu)
+
+You (pl) slept – אתם/אתן ישנתם/ישנתן (atem/aten yashantem/yashanten)
+
+They slept – הם/הן ישנו (hem/hen yashnu)
+
+
+- ❗ Do **not** add bullets (•, ·, -, etc.) at the beginning of normal explanatory sentences. Use regular sentences unless it's a list.
 - Use tables only for concise overviews
 - Never include backslash-n (\\n) or inline line breaks — use actual new lines instead
 - ✅ Ensure each bullet point is on its own line
