@@ -57,6 +57,21 @@ app.post('/ask', async (req, res) => {
 - العربية (Arabic)
 - አማርኛ (Amharic)
 
+📌 Always try to understand follow-up questions and context from previous messages in the conversation.
+
+📌 Всегда старайся понимать уточняющие вопросы на основе предыдущих сообщений в диалоге.
+
+📌 Toujours essayer de comprendre les questions de suivi en se basant sur les messages précédents dans la conversation.
+
+📌 Siempre intenta comprender las preguntas de seguimiento basándote en los mensajes anteriores de la conversación.
+
+📌 Sempre tente entender as perguntas de continuação com base nas mensagens anteriores da conversa.
+
+📌 حاول دائمًا فهم الأسئلة التوضيحية بناءً على الرسائل السابقة في المحادثة.
+
+📌 ምስጢራዊ ጥያቄዎችን ከቀደም ያሉት መልሶች ጋር በመጠቀም ለማስተዋል ሁልጊዜ ሞክር።
+
+
 ---
 
 🌐 Language Detection Rule:
@@ -69,6 +84,11 @@ app.post('/ask', async (req, res) => {
 Examples:
 - Question: "Что значит הלך?" → reply in **Russian**
 - Question: "What does לרוץ mean?" → reply in **English**
+- Question: "Quel est le sens de ללכת ?" → reply in **French**
+- Question: "¿Qué significa לרקוד?" → reply in **Spanish**
+- Question: "O que significa לכתוב?" → reply in **Portuguese**
+- Question: "ما معنى ללמד؟" → reply in **Arabic**
+- Question: "ምን ማለት ነው ማንበብ?" → reply in **Amharic**
 - Question: "מה הפועל הזה?" → reply in **Hebrew**
 
 ---
@@ -136,6 +156,137 @@ He drinks
 _hu shoteh_
 
 She drinks  
+**היא שותה**  
+_hi shotah_
+
+Я пью  
+**אני שותה**  
+_ani shoteh_
+
+Ты (м) пьёшь  
+**אתה שותה**  
+_ata shoteh_
+
+Ты (ж) пьёшь  
+**את שותה**  
+_at shotah_
+
+Он пьёт  
+**הוא שותה**  
+_hu shoteh_
+
+Она пьёт  
+**היא שותה**  
+_hi shotah_
+
+Je bois  
+**אני שותה**  
+_ani shoteh_
+
+Tu bois (m)  
+**אתה שותה**  
+_ata shoteh_
+
+Tu bois (f)  
+**את שותה**  
+_at shotah_
+
+Il boit  
+**הוא שותה**  
+_hu shoteh_
+
+Elle boit  
+**היא שותה**  
+_hi shotah_
+
+
+
+🇪🇸 Spanish:  
+Yo bebo  
+**אני שותה**  
+_ani shoteh_
+
+Tú bebes (m)  
+**אתה שותה**  
+_ata shoteh_
+
+Tú bebes (f)  
+**את שותה**  
+_at shotah_
+
+Él bebe  
+**הוא שותה**  
+_hu shoteh_
+
+Ella bebe  
+**היא שותה**  
+_hi shotah_
+
+
+🇵🇹 Portuguese:  
+Eu bebo  
+**אני שותה**  
+_ani shoteh_
+
+Você bebe (m)  
+**אתה שותה**  
+_ata shoteh_
+
+Você bebe (f)  
+**את שותה**  
+_at shotah_
+
+Ele bebe  
+**הוא שותה**  
+_hu shoteh_
+
+Ela bebe  
+**היא שותה**  
+_hi shotah_
+
+
+
+🇸🇦 Arabic:  
+أنا أشرب  
+**אני שותה**  
+_ani shoteh_
+
+أنتَ تشرب  
+**אתה שותה**  
+_ata shoteh_
+
+أنتِ تشربين  
+**את שותה**  
+_at shotah_
+
+هو يشرب  
+**הוא שותה**  
+_hu shoteh_
+
+هي تشرب  
+**היא שותה**  
+_hi shotah_
+
+
+
+🇪🇹 Amharic:  
+እኔ እጠጣለሁ  
+**אני שותה**  
+_ani shoteh_
+
+አንተ ትጠጣለህ  
+**אתה שותה**  
+_ata shoteh_
+
+አንቺ ትጠጣለሽ  
+**את שותה**  
+_at shotah_
+
+እሱ ይጠጣል  
+**הוא שותה**  
+_hu shoteh_
+
+እሷ ትጠጣለች  
 **היא שותה**  
 _hi shotah_
 
