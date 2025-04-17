@@ -18,35 +18,38 @@ function normalize(text) {
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
 
-  let { question, history = [], verbContext = '' } = req.body;
+  const { question, history = [], verbContext = '' } = req.body;
 
   if (!question) {
+    console.warn('⚠️ Вопрос не передан!');
     return res.status(400).json({ reply: 'Вопрос не передан' });
   }
 
-  const normalized = question.trim().toLowerCase();
+  const normalized = normalize(question);
   const yesWords = ['да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ'];
+  const isConfirmation = yesWords.includes(normalized);
 
-  let updatedHistory = [...history];
+  // 💡 Особый ключ для подтверждений
+  const cacheKey = isConfirmation
+    ? normalize(`CONFIRM:${verbContext}`)
+    : normalize(question);
 
-  // ✅ Если ответ подтверждающий — подменяем question и добавляем context в историю
-  if (verbContext && yesWords.includes(normalized)) {
-    console.log('📌 Пользователь подтвердил — добавляем verbContext:', verbContext);
-  
-    updatedHistory = [
-      ...updatedHistory,
-      { role: 'user', content: verbContext }
-    ];
-  }
-
-  const key = normalize(question);
-  if (cache.has(key)) {
-    console.log('💾 Ответ из кеша');
-    return res.json({ reply: cache.get(key) });
+  if (cache.has(cacheKey)) {
+    console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
+    return res.json({ reply: cache.get(cacheKey) });
   }
 
   try {
     console.log('🔗 Отправка запроса в OpenAI...');
+    console.log('📦 Используем модель:', model);
+
+    let updatedHistory = [...history];
+
+    if (isConfirmation && verbContext) {
+      console.log('📌 Пользователь подтвердил — добавляем verbContext:', verbContext);
+      updatedHistory.push({ role: 'user', content: verbContext });
+    }
+
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
@@ -260,18 +263,10 @@ If user answers:
       return res.status(500).json({ reply: 'Пустой ответ от ChatGPT' });
     }
 
-     // ✅ Если в ответе уже есть таблица — сбросить verbContext
-     const isConjugationShown =
-     reply.toLowerCase().includes('infinitive:') ||
-     reply.toLowerCase().includes('инфинитив:');
-
-   if (isConjugationShown) {
-     console.log('✅ Таблица спряжения показана — сбрасываем verbContext');
-   }
-
-    cache.set(key, reply);
+    cache.set(cacheKey, reply);
     console.log('✅ Ответ получен от OpenAI');
     return res.status(200).json({ reply });
+
   } catch (error) {
     console.error('❌ Ошибка запроса к OpenAI:', error.response?.data || error.message);
     return res.status(500).json({ reply: 'Ошибка при запросе к ChatGPT' });
