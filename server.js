@@ -1,16 +1,42 @@
+const express = require('express');
+const axios = require('axios');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const cache = new Map();
+const model = 'gpt-4o-mini';
+
+function normalize(text) {
+  return text.trim().toLowerCase();
+}
+
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
 
-  const { question, history = [], verbContext = '' } = req.body;
+  let { question, history = [], verbContext = '' } = req.body;
 
   if (!question) {
-    console.warn('⚠️ Вопрос не передан!');
     return res.status(400).json({ reply: 'Вопрос не передан' });
   }
 
-  // 🔑 Ключ кэша — теперь включаем verbContext, только если он релевантен
-  const key = normalize(`${verbContext || ''} ${question}`);
+  const normalized = question.trim().toLowerCase();
+  const yesWords = ['да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ'];
 
+  let updatedHistory = [...history];
+
+  // ✅ Если ответ подтверждающий — подменяем question и добавляем context в историю
+  if (verbContext && yesWords.includes(normalized)) {
+    console.log('📌 Пользователь подтвердил — добавляем verbContext:', verbContext);
+    updatedHistory.push({ role: 'user', content: verbContext });
+    question = verbContext; // ← теперь вопрос для кеша и OpenAI — это контекст
+  }
+
+  const key = normalize(question);
   if (cache.has(key)) {
     console.log('💾 Ответ из кеша');
     return res.json({ reply: cache.get(key) });
@@ -18,19 +44,6 @@ app.post('/ask', async (req, res) => {
 
   try {
     console.log('🔗 Отправка запроса в OpenAI...');
-    console.log('📦 Используем модель:', model);
-
-    // ✅ Подготовка истории с учётом verbContext
-    let updatedHistory = [...history];
-
-    const normalized = question.trim().toLowerCase();
-    const yesWords = ['да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ'];
-
-    if (verbContext && yesWords.includes(normalized)) {
-      console.log('📌 Добавляем verbContext в историю:', verbContext);
-      updatedHistory.push({ role: 'user', content: verbContext });
-    }
-
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
@@ -222,7 +235,7 @@ If user answers:
 
 
 
-` // весь системный промт без изменений
+`
           },
           ...updatedHistory,
           { role: 'user', content: question }
@@ -251,4 +264,9 @@ If user answers:
     console.error('❌ Ошибка запроса к OpenAI:', error.response?.data || error.message);
     return res.status(500).json({ reply: 'Ошибка при запросе к ChatGPT' });
   }
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Сервер работает: http://localhost:${PORT}`);
 });
