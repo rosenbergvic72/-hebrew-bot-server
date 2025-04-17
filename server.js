@@ -32,8 +32,11 @@ app.post('/ask', async (req, res) => {
   // ✅ Если ответ подтверждающий — подменяем question и добавляем context в историю
   if (verbContext && yesWords.includes(normalized)) {
     console.log('📌 Пользователь подтвердил — добавляем verbContext:', verbContext);
-    updatedHistory.push({ role: 'user', content: verbContext });
-    question = verbContext; // ← теперь вопрос для кеша и OpenAI — это контекст
+  
+    updatedHistory = [
+      ...updatedHistory,
+      { role: 'user', content: verbContext }
+    ];
   }
 
   const key = normalize(question);
@@ -256,6 +259,15 @@ If user answers:
       console.warn('⚠️ OpenAI вернул пустой ответ!');
       return res.status(500).json({ reply: 'Пустой ответ от ChatGPT' });
     }
+
+     // ✅ Если в ответе уже есть таблица — сбросить verbContext
+     const isConjugationShown =
+     reply.toLowerCase().includes('infinitive:') ||
+     reply.toLowerCase().includes('инфинитив:');
+
+   if (isConjugationShown) {
+     console.log('✅ Таблица спряжения показана — сбрасываем verbContext');
+   }
 
     cache.set(key, reply);
     console.log('✅ Ответ получен от OpenAI');
