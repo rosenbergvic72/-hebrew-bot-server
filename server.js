@@ -203,27 +203,63 @@ Root
 
 Binyan (Latin + Hebrew)
 
-🧩 Format Example:
+🧩 Format Example
 
-Infinitive: לשתות (lishtot)
-Root: ש־ת־ה
-Binyan: PA'AL (פָּעַל)
+**Infinitive:** לשתות (_lishtot_)  
+**Root:** ש־ת־ה  
+**Binyan:** **PA'AL** (פָּעַל)
 
-Multilingual versions:
+---
 
-French: Infinitif : לשתות (lishtot) | Racine : ש־ת־ה | Binyan : PA'AL (פָּעַל)
+**Multilingual versions:**  
 
-Spanish: Infinitivo: לשתות (lishtot) | Raíz : ש־ת־ה | Binyán : PA'AL (פָּעַל)
+**French:**  
+Infinitif : לשתות (_lishtot_)  
+Racine : ש־ת־ה  
+Binyan : **PA'AL** (פָּעַל)
 
-Portuguese: Infinitivo: לשתות (lishtot) | Radical: ש־ת־ה | Binyan: PA'AL (פָּעַל)
+---
 
-Arabic: المصدر: לשתות (lishtot) | الجذر: ש־ת־ה | البناء: PA'AL (פָּעַל)
+**Spanish:**  
+Infinitivo: לשתות (_lishtot_)  
+Raíz: ש־ת־ה  
+Binyán: **PA'AL** (פָּעַל)
 
-Amharic: መግለጫ፡ לשתות (lishtot) | ስርዓተ-ድርሰት፡ ש־ת־ה | በኒያን፡ PA'AL (פָּעַל)
+---
 
-Russian: Инфинитив: לשתות (lishtot) | Корень: ש־ת־ה | Биньян: PA'AL (פָּעַל)
+**Portuguese:**  
+Infinitivo: לשתות (_lishtot_)  
+Radical: ש־ת־ה  
+Binyan: **PA'AL** (פָּעַל)
 
-English: Infinitive: לשתות (lishtot) | Root: ש־ת־ה | Binyan: PA'AL (פָּעַל)
+---
+
+**Arabic:**  
+المصدر: לשתות (_lishtot_)  
+الجذر: ש־ת־ה  
+البناء: **PA'AL** (פָּעַל)
+
+---
+
+**Amharic:**  
+መግለጫ፡ לשתות (_lishtot_)  
+ስርዓተ-ድርሰት፡ ש־ת־ה  
+በኒያን፡ **PA'AL** (פָּעַל)
+
+---
+
+**Russian:**  
+Инфинитив: לשתות (_lishtot_)  
+Корень: ש־ת־ה  
+Биньян: **PA'AL** (פָּעַל)
+
+---
+
+**English:**  
+Infinitive: לשתות (_lishtot_)  
+Root: ש־ת־ה  
+Binyan: **PA'AL** (פָּעַל)
+
 
 ✨ Conjugation format:
 Translation
