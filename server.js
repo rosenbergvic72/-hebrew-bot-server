@@ -1,23 +1,3 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
-require('dotenv').config();
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const cache = new Map();
-const model = 'gpt-4o-mini';
-
-function normalize(text) {
-  return text.trim().toLowerCase();
-}
-
-// Поддержка подтверждающих ответов на разных языках
-const affirmatives = ['да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ'];
-
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
 
@@ -28,7 +8,9 @@ app.post('/ask', async (req, res) => {
     return res.status(400).json({ reply: 'Вопрос не передан' });
   }
 
-  const key = normalize(`${verbContext} ${question}`);
+  // 🔑 Ключ кэша — теперь включаем verbContext, только если он релевантен
+  const key = normalize(`${verbContext || ''} ${question}`);
+
   if (cache.has(key)) {
     console.log('💾 Ответ из кеша');
     return res.json({ reply: cache.get(key) });
@@ -38,9 +20,23 @@ app.post('/ask', async (req, res) => {
     console.log('🔗 Отправка запроса в OpenAI...');
     console.log('📦 Используем модель:', model);
 
-    // Создаём массив сообщений для OpenAI
-    const messages = [
+    // ✅ Подготовка истории с учётом verbContext
+    let updatedHistory = [...history];
+
+    const normalized = question.trim().toLowerCase();
+    const yesWords = ['да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ'];
+
+    if (verbContext && yesWords.includes(normalized)) {
+      console.log('📌 Добавляем verbContext в историю:', verbContext);
+      updatedHistory.push({ role: 'user', content: verbContext });
+    }
+
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
       {
+        model,
+        messages: [
+          {
             role: 'system',
             content: `
  🧠 IMPORTANT: Detect the user's language from the last message and always reply in the same language.
@@ -226,59 +222,33 @@ If user answers:
 
 
 
-`
-,
-            
-},
-...history,
-];
+` // весь системный промт без изменений
+          },
+          ...updatedHistory,
+          { role: 'user', content: question }
+        ],
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-// Проверка, является ли вопрос подтверждением
-const normalizedQuestion = normalize(question);
-const isAffirmative = affirmatives.includes(normalizedQuestion);
+    const reply = response.data.choices?.[0]?.message?.content?.trim();
 
-if (verbContext && isAffirmative) {
-messages.push({
-  role: 'user',
-  content: `Пожалуйста, покажи спряжение глагола из предыдущего вопроса: "${verbContext}"`,
+    if (!reply) {
+      console.warn('⚠️ OpenAI вернул пустой ответ!');
+      return res.status(500).json({ reply: 'Пустой ответ от ChatGPT' });
+    }
+
+    cache.set(key, reply);
+    console.log('✅ Ответ получен от OpenAI');
+    return res.status(200).json({ reply });
+  } catch (error) {
+    console.error('❌ Ошибка запроса к OpenAI:', error.response?.data || error.message);
+    return res.status(500).json({ reply: 'Ошибка при запросе к ChatGPT' });
+  }
 });
-} else {
-messages.push({ role: 'user', content: question });
-}
-
-const response = await axios.post(
-'https://api.openai.com/v1/chat/completions',
-{
-  model,
-  messages,
-  temperature: 0.7,
-},
-{
-  headers: {
-    Authorization: `Bearer ${OPENAI_API_KEY}`,
-    'Content-Type': 'application/json',
-  },
-}
-);
-
-const reply = response.data.choices?.[0]?.message?.content?.trim();
-
-if (!reply) {
-console.warn('⚠️ OpenAI вернул пустой ответ!');
-return res.status(500).json({ reply: 'Пустой ответ от ChatGPT' });
-}
-
-cache.set(key, reply);
-console.log('✅ Ответ получен от OpenAI');
-return res.status(200).json({ reply });
-} catch (error) {
-console.error('❌ Ошибка запроса к OpenAI:', error.response?.data || error.message);
-return res.status(500).json({ reply: 'Ошибка при запросе к ChatGPT' });
-}
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-console.log(`🚀 Сервер работает: http://localhost:${PORT}`);
-});
-
