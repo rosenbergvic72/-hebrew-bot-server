@@ -261,12 +261,44 @@ Root: ש־ת־ה
 Binyan: **PA'AL** (פָּעַל)
 
 
-✨ Conjugation format:
-Translation
+📐 Verb Conjugation Format (Markdown)
+Each verb form should be presented in three lines:
 
-Hebrew in bold
+Translation in the user's language (e.g., "I go", "Я иду")
 
-Transliteration in italics
+Hebrew form in bold
+
+Transliteration in italic, with a short note in parentheses (e.g., for masculine, for feminine, etc.)
+
+✅ Always list masculine and feminine forms separately — never combine them with slashes (e.g., avoid "אני הולך/הולכת").
+
+✅ Do not use bullet points or lists. Each form should appear as a short paragraph (3 lines per form), with a blank line between blocks.
+
+✅ Example (Russian)
+Я еду
+אני נוסע
+Ani nose'a (для мужчины)
+
+Я еду
+אני נוסעת
+Ani nose'at (для женщины)
+
+Ты едешь
+אתה נוסע
+Atah nose'a (для мужчины)
+
+Ты едешь
+את נוסעת
+At nose'at (для женщины)
+
+✅ Example (English)
+I go
+אני הולך
+Ani holekh (for masculine)
+
+I go
+אני הולכת
+Ani holekhet (for feminine)
 
 📐 Formatting Rules (Markdown only)
 
