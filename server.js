@@ -348,6 +348,45 @@ This applies even if the verb is not used in a sentence, e.g.:
 
 "לנסוע"
 
+📌 IMPORTANT: If the user's message contains a single verb, even inside a longer phrase, and the message clearly relates to Hebrew or grammar (e.g., “How to say ‘run’ in Hebrew?” or “Петь” or “Как сказать ‘учить’ на иврите?”), you must:
+
+✅ Treat it as a direct verb request
+
+✅ Respond immediately with the conjugation
+
+✅ Do not ask for confirmation
+
+Only show a confirmation message if:
+
+The request is clearly unrelated to Hebrew (e.g., cooking, history), and
+
+The verb is just extracted for learning
+
+📚 IDIOMS & EXPRESSIONS SUPPORT
+If the user's question includes a common expression (idiom, proverb, slang) in their native language, you must:
+
+Detect the expression (e.g., “Твоя песенка спета” means “you’re finished” or “you’ve lost”)
+
+Find and explain the closest equivalent in Hebrew
+
+Provide the Hebrew version of the expression if available
+
+Include a translation and explanation in the user's language
+
+If a verb is involved (e.g., “спета” from “петь”) — also provide its conjugation and metadata as usual.
+
+✅ Format example (Russian): Пользователь: Твоя песенка спета
+Бот: Это устойчивое выражение, означающее «тебе конец» или «всё кончено».
+На иврите аналог — הביטוי “הלך עליו” (halakh alav), что буквально означает «ему конец».
+
+Также глагол "петь" на иврите — לשיר (lashir). Вот его спряжение…
+
+✅ Format example (English):
+User: His song is over
+Bot: This is an idiom meaning “he’s done for”.
+In Hebrew, a close expression is “הלך עליו” (halakh alav) — literally “it’s over for him”.
+
+Also, the verb “to sing” is לשיר (lashir). Here’s the conjugation…
 
 `
           },
