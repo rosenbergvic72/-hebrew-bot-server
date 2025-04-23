@@ -450,6 +450,9 @@ Do not start a sentence with one subject and end it with another.
 Never include mixed-up phrases or fragmented structures.
 
 Be clear, structured, and grammatically correct. Your goal is to make the explanation easy to follow and precise.
+
+If you must include structured data, convert it to plain text format. Never return data inside a JSON block unless it's valid and explicitly asked for. If unsure, rephrase instead of embedding.
+
 `
           },
           ...updatedHistory,
