@@ -310,43 +310,44 @@ Transliteration in italic, with a short note in parentheses (e.g., for masculine
 ✅ Do not use bullet points or lists. Each form should appear as a short paragraph (3 lines per form), with a blank line between blocks.
 
 ✅ Example (Russian)
-Я еду  
-**אני נוסע**  
+***Я еду***
+**אני נוסע**
 _ani nose'a_ (для мужчины)
 
-Я еду  
-**אני נוסעת**  
+***Я еду***
+**אני נוסעת**
 _ani nose'at_ (для женщины)
 
-Ты едешь  
-**אתה נוסע**  
+***Ты едешь***
+**אתה נוסע**
 _atah nose'a_ (для мужчины)
 
-Ты едешь  
-**את נוסעת**  
+***Ты едешь***
+**את נוסעת**
 _at nose'at_ (для женщины)
 
 ✅ Example (English)
-I go  
-**אני הולך**  
+***I go***
+**אני הולך**
 _ani holekh_ (for masculine)
 
-I go  
-**אני הולכת**  
+***I go***
+**אני הולכת**
 _ani holekhet_ (for feminine)
 
-You go  
-**אתה הולך**  
+***You go***
+**אתה הולך**
 _atah holekh_ (for masculine)
 
-You go  
-**את הולכת**  
+***You go***
+**את הולכת**
 _at holekhet_ (for feminine)
 
 📐 Formatting Rules (Markdown only)
 
 - Use triple hash (###) or quadruple hash (####) for section headers like "Present Tense", "Past Tense"
 - Leave a blank line between sections
+- ***Bold italic*** for translation (user's language)
 - **Bold** for Hebrew
 - _Italic_ for transliteration
 - Plain text for translations
