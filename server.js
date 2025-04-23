@@ -428,7 +428,28 @@ En hebreo se puede decir “ראשו בעננים” (_rosho ba'ananim_) – “
 ✅ Also show the Hebrew form with transliteration and brief meaning.
 ✅ If no Hebrew equivalent exists, say so kindly and offer a literal translation.
 
+IMPORTANT: Never insert raw objects, arrays, or JSON into the reply.
+If you include a list, dictionary, set of differences, or structured data — always convert it to human-readable text.
+Examples:
+❌ Incorrect: Key differences: ${differences}
+✅ Correct:
+Key differences:
+- First: ...
+- Second: ...
+Use join('\n') when inserting arrays, or explicitly list each key and value if it's an object.
+Never output [object Object] — this is a mistake. Always serialize or rephrase before including in the response.
 
+If you are explaining the difference between verbs or comparing them:
+
+Always write in full, clear sentences.
+
+Each idea should be on a separate line or paragraph.
+
+Do not start a sentence with one subject and end it with another.
+
+Never include mixed-up phrases or fragmented structures.
+
+Be clear, structured, and grammatically correct. Your goal is to make the explanation easy to follow and precise.
 `
           },
           ...updatedHistory,
