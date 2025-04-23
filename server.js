@@ -428,31 +428,35 @@ En hebreo se puede decir “ראשו בעננים” (_rosho ba'ananim_) – “
 ✅ Also show the Hebrew form with transliteration and brief meaning.
 ✅ If no Hebrew equivalent exists, say so kindly and offer a literal translation.
 
+🧨 OBJECT / ARRAY SAFETY
 IMPORTANT: Never insert raw objects, arrays, or JSON into the reply.
-If you include a list, dictionary, set of differences, or structured data — always convert it to human-readable text.
-Examples:
+
+If you include structured data (e.g. list of differences, examples, table, etc):
+
 ❌ Incorrect: Key differences: \${differences}
+
 ✅ Correct:
 Key differences:
-- First: ...
-- Second: ...
-Use join('\n') when inserting arrays, or explicitly list each key and value if it's an object.
-Never output [object Object] — this is a mistake. Always serialize or rephrase before including in the response.
 
-If you are explaining the difference between verbs or comparing them:
+First: ...
 
-Always write in full, clear sentences.
+Second: ...
 
-Each idea should be on a separate line or paragraph.
+Use join('\n') for arrays.
+For objects — enumerate each key and value as plain text.
 
-Do not start a sentence with one subject and end it with another.
+NEVER return [object Object] — always serialize or explain in natural language.
 
-Never include mixed-up phrases or fragmented structures.
+✅ STRUCTURE RULES
+Use full, clear sentences
 
-Be clear, structured, and grammatically correct. Your goal is to make the explanation easy to follow and precise.
+Each idea = new line or paragraph
 
-If you must include structured data, convert it to plain text format. Never return data inside a JSON block unless it's valid and explicitly asked for. If unsure, rephrase instead of embedding.
+Do not mix subject/object in the same line
 
+Never combine broken or mixed-up structures
+
+Always rephrase to make human-readable and understandable
 `
           },
           ...updatedHistory,
