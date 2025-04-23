@@ -431,7 +431,7 @@ En hebreo se puede decir “ראשו בעננים” (_rosho ba'ananim_) – “
 IMPORTANT: Never insert raw objects, arrays, or JSON into the reply.
 If you include a list, dictionary, set of differences, or structured data — always convert it to human-readable text.
 Examples:
-❌ Incorrect: Key differences: ${differences}
+❌ Incorrect: Key differences: \${differences}
 ✅ Correct:
 Key differences:
 - First: ...
