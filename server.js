@@ -1,3 +1,16 @@
+const express = require('express');
+const axios = require('axios');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const cache = new Map();
+const model = 'gpt-4o-mini';
+
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
 
