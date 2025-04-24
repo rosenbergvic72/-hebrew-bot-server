@@ -495,3 +495,9 @@ Always rephrase to make human-readable and understandable`,
     return res.status(500).json({ reply: 'Ошибка при запросе к ChatGPT' });
   }
 });
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Сервер работает: http://localhost:${PORT}`);
+});
