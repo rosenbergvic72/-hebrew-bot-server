@@ -1,20 +1,3 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
-require('dotenv').config();
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const cache = new Map();
-const model = 'gpt-4o-mini';
-
-function normalize(text) {
-  return text.trim().toLowerCase();
-}
-
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
 
@@ -25,14 +8,13 @@ app.post('/ask', async (req, res) => {
     return res.status(400).json({ reply: 'Вопрос не передан' });
   }
 
-  const normalized = normalize(question);
+  const normalized = question.trim().toLowerCase();
   const yesWords = ['да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ'];
   const isConfirmation = yesWords.includes(normalized);
 
-  // 💡 Особый ключ для подтверждений
   const cacheKey = isConfirmation
-    ? normalize(`CONFIRM:${verbContext}`)
-    : normalize(question);
+    ? `CONFIRM:${verbContext?.toLowerCase()}`
+    : normalized;
 
   if (cache.has(cacheKey)) {
     console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
@@ -46,19 +28,14 @@ app.post('/ask', async (req, res) => {
     let updatedHistory = [...history];
 
     if (isConfirmation && verbContext) {
-      console.log('📌 Пользователь подтвердил — добавляем verbContext:', verbContext);
+      console.log('📌 Подтверждение — добавляем verbContext:', verbContext);
       updatedHistory.push({ role: 'user', content: verbContext });
     }
 
-    const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
+    const cleanMessages = [
       {
-        model,
-        messages: [
-          {
-            role: 'system',
-            content: `
- 🧠 IMPORTANT: Detect the user's language from the last message and always reply in the same language.
+        role: 'system',
+        content: ` 🧠 IMPORTANT: Detect the user's language from the last message and always reply in the same language.
 Never default to English or Russian unless the user’s message is in that language.
 If unsure, ask the user to specify their preferred language.
 
@@ -368,21 +345,7 @@ If user answers:
 
 ✅ Special Handling of One-Word or One-Verb Requests
 If the user sends a message that clearly contains a single verb (e.g., "переводить", "to cook", "apprendre", "ללכת", etc.) — it is considered on-topic and must be processed immediately.
-📌 ALWAYS INCLUDE ALL TENSES
 
-When replying with a conjugation of a Hebrew verb, you must include:
-
-- Present tense
-- Past tense
-- Future tense
-
-Show all three tenses unless the verb does not have them (e.g., להיות).
-
-Do not wait for the user to ask for other tenses.
-
-✅ Each tense should be labeled (### Present Tense, etc.)
-✅ Separate sections with a blank line
-✅ Always follow the formatting rules (bold Hebrew, italic transliteration, etc.)
 
 ✅ Do NOT ask “Would you like to see its conjugation?”
 ✅ Instead, reply directly with full explanation, metadata block, and conjugations.
@@ -472,12 +435,27 @@ Do not mix subject/object in the same line
 
 Never combine broken or mixed-up structures
 
-Always rephrase to make human-readable and understandable
-`
-          },
-          ...updatedHistory,
-          { role: 'user', content: question }
-        ],
+Always rephrase to make human-readable and understandable`,
+      },
+      ...updatedHistory.map((msg) => ({
+        role: msg.role,
+        content: typeof msg.content === 'string'
+          ? msg.content
+          : JSON.stringify(msg.content),
+      })),
+      {
+        role: 'user',
+        content: typeof question === 'string'
+          ? question
+          : JSON.stringify(question),
+      },
+    ];
+
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model,
+        messages: cleanMessages,
         temperature: 0.7,
       },
       {
@@ -503,9 +481,4 @@ Always rephrase to make human-readable and understandable
     console.error('❌ Ошибка запроса к OpenAI:', error.response?.data || error.message);
     return res.status(500).json({ reply: 'Ошибка при запросе к ChatGPT' });
   }
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`🚀 Сервер работает: http://localhost:${PORT}`);
 });
