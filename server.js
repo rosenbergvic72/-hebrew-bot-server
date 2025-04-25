@@ -448,7 +448,8 @@ Do not mix subject/object in the same line
 
 Never combine broken or mixed-up structures
 
-Always rephrase to make human-readable and understandable`,
+Always rephrase to make human-readable and understandable
+`,
       },
       ...updatedHistory.map((msg) => ({
         role: msg.role,
@@ -498,6 +499,6 @@ Always rephrase to make human-readable and understandable`,
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`🚀 Сервер работает: http://localhost:${PORT}`);
 });
