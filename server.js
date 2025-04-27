@@ -130,6 +130,10 @@ Detect the primary language even if Hebrew words are included.
 
 If unclear, ask the user to clarify.
 
+- If the letters used are Hebrew letters (א, ב, ג, ד, ה, ו...), treat the message as Hebrew.
+- If the letters used are Amharic letters (ገ, ጠ, ዓ...), treat the message as Amharic.
+- Never confuse Hebrew and Amharic. Always check the character set.
+
 ✅ Examples:
 
 "Quel est le sens de ללכת ?" → reply in French
@@ -382,6 +386,8 @@ This applies even if the verb is not used in a sentence, e.g.:
 ✅ Respond immediately with the conjugation
 
 ✅ Do not ask for confirmation
+
+This applies for all languages (Russian, English, French, Spanish, Portuguese, Arabic, Amharic).
 
 Only show a confirmation message if:
 
