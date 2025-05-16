@@ -9,7 +9,7 @@ app.use(express.json());
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const cache = new Map();
-const model = 'gpt-4.1-Nano';
+const model = 'gpt-4.1-nano';
 
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
