@@ -11,6 +11,12 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const cache = new Map();
 const model = 'gpt-4.1-nano';
 
+// 🧹 Автоматическая очистка кэша раз в 10 минут
+setInterval(() => {
+  cache.clear();
+  console.log('🧹 Кэш очищен автоматически (TTL)');
+}, 10 * 60 * 1000); // 10 минут
+
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
 
@@ -22,14 +28,21 @@ app.post('/ask', async (req, res) => {
   }
 
   const normalized = question.trim().toLowerCase();
-  const yesWords = ['да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ'];
+
+  const yesWords = [
+    'да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ',
+    'хочу', 'i want', 'je veux', 'quiero', 'eu quero', 'أريد', 'እፈልጋለሁ'
+  ];
+
   const isConfirmation = yesWords.includes(normalized);
 
   const cacheKey = isConfirmation
     ? `CONFIRM:${verbContext?.toLowerCase()}`
     : normalized;
 
-  if (cache.has(cacheKey)) {
+  const skipCache = isConfirmation;
+
+  if (!skipCache && cache.has(cacheKey)) {
     console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
     return res.json({ reply: cache.get(cacheKey) });
   }
@@ -44,7 +57,6 @@ app.post('/ask', async (req, res) => {
       console.log('📌 Подтверждение — добавляем verbContext:', verbContext);
       updatedHistory.push({ role: 'user', content: verbContext });
     }
-
     const cleanMessages = [
       {
         role: 'system',
