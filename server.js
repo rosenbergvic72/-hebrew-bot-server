@@ -9,7 +9,7 @@ app.use(express.json());
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const cache = new Map();
-const model = 'gpt-4.1-nano';
+const model = 'gpt-5.1-nano';
 
 // 🧹 Автоматическая очистка кэша раз в 10 минут
 setInterval(() => {
@@ -572,20 +572,23 @@ Always rephrase to make human-readable and understandable
       },
     ];
 
-    const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
-      {
-        model,
-        messages: cleanMessages,
-        temperature: 0.7,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+const response = await axios.post(
+  'https://api.openai.com/v1/chat/completions',
+  {
+    model,
+    messages: cleanMessages,
+    reasoning_effort: 'minimal', // или 'low' / 'medium' / 'high'
+    verbosity: 'medium',         // или 'low' / 'high'
+    // temperature: '0.7',       // этот параметр удалить — он больше не поддерживается!
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+  }
+);
+
 
     const reply = response.data.choices?.[0]?.message?.content?.trim();
 
