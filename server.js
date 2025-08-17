@@ -9,7 +9,7 @@ app.use(express.json());
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const cache = new Map();
-const model = 'gpt-5.1-nano';
+const model = 'gpt-5-nano';
 
 // 🧹 Автоматическая очистка кэша раз в 10 минут
 setInterval(() => {
