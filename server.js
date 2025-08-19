@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -9,7 +8,9 @@ app.use(cors());
 app.use(express.json());
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const cache = new Map(); // кэш ответов
+const cache = new Map();
+const model = 'gpt-5-nano';
+const PLANNER_MODEL = 'gpt-5'; // модель для построения плана
 
 // 🧹 Автоматическая очистка кэша раз в 10 минут
 setInterval(() => {
@@ -17,75 +18,50 @@ setInterval(() => {
   console.log('🧹 Кэш очищен автоматически (TTL)');
 }, 10 * 60 * 1000); // 10 минут
 
-// ========== 🔧 КАСКАД: nano → mini ==========
+app.post('/ask', async (req, res) => {
+  console.log('📥 Получен запрос от клиента:', req.body);
 
-// 1) Обёртка над OpenAI Chat Completions
-async function askLLM(messages, model) {
-  const { data } = await axios.post(
-    'https://api.openai.com/v1/chat/completions',
-    {
-      model,
-      messages,
-      reasoning_effort: 'minimal',
-      verbosity: 'medium',
-      // temperature — не используем (устарел)
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      timeout: 30000,
+  const { question, history = [], verbContext = '' } = req.body;
+
+  if (!question) {
+    console.warn('⚠️ Вопрос не передан!');
+    return res.status(400).json({ reply: 'Вопрос не передан' });
+  }
+
+  const normalized = question.trim().toLowerCase();
+
+  const yesWords = [
+    'да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ',
+    'хочу', 'i want', 'je veux', 'quiero', 'eu quero', 'أريد', 'እፈልጋለሁ'
+  ];
+
+  const isConfirmation = yesWords.includes(normalized);
+
+  const cacheKey = isConfirmation
+    ? `CONFIRM:${verbContext?.toLowerCase()}`
+    : normalized;
+
+  const skipCache = isConfirmation;
+
+  if (!skipCache && cache.has(cacheKey)) {
+    console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
+    return res.json({ reply: cache.get(cacheKey) });
+  }
+
+  try {
+    console.log('🔗 Отправка запроса в OpenAI...');
+    console.log('📦 Используем модель:', model);
+
+    let updatedHistory = [...history];
+
+    if (isConfirmation && verbContext) {
+      console.log('📌 Подтверждение — добавляем verbContext:', verbContext);
+      updatedHistory.push({ role: 'user', content: verbContext });
     }
-  );
-  return data.choices?.[0]?.message?.content?.trim() || '';
-}
-
-// 2) Простая валидация структуры ответа (метаданные + наличие Present)
-function isValidHebrewReply(txt) {
-  if (!txt || typeof txt !== 'string') return false;
-
-  const hasMeta =
-    /Infinitive|Инфинитив|المصدر|መግለጫ|Infinitif|Infinitivo:/i.test(txt);
-  const hasRoot =
-    /Root|Корень|الجذر|ስር|Racine|Ra[ií]z|Radical/i.test(txt);
-  const hasBinyan =
-    /Binyan|Биньян|البناء|በኒያን/i.test(txt);
-
-  // заголовок раздела Present (на разных языках)
-  const hasPresent =
-    /###\s*Present|###\s*Настоящ|###\s*Presente|###\s*Présent|###\s*الحاضر|###\s*አሁን/i.test(txt);
-
-  return hasMeta && hasRoot && hasBinyan && hasPresent;
-}
-
-// 3) Роутер: пробуем nano → если невалидно → mini
-async function routedAsk(messages) {
-  // 1) nano — дешево и быстро
-  let txt;
-  try {
-    txt = await askLLM(messages, 'gpt-5.1-nano');
-  } catch (e) {
-    console.warn('⚠️ nano запрос упал, сразу перейдем на mini:', e?.response?.status || e?.message);
-  }
-
-  if (txt && isValidHebrewReply(txt)) {
-    return txt;
-  }
-
-  // 2) fallback — mini
-  try {
-    const txtMini = await askLLM(messages, 'gpt-5.1-mini');
-    return txtMini || txt || ''; // если mini вернул пусто — вернем то, что было
-  } catch (e) {
-    console.error('❌ mini тоже упал:', e?.response?.data || e?.message);
-    return txt || '';
-  }
-}
-
-// ========== Ваш большой System Prompt без изменений ==========
-const SYSTEM_PROMPT = `
- 🧠 # CRITICAL RULES
+    const cleanMessages = [
+      {
+        role: 'system',
+        content: ` 🧠 # CRITICAL RULES
 
 - ALWAYS reply in the user's language (English, Russian, French, Spanish, Portuguese, Arabic, Amharic).
 - NEVER reply entirely in Hebrew unless the user wrote their message in Hebrew.
@@ -116,7 +92,7 @@ const SYSTEM_PROMPT = `
 
 - SIEMPRE responde en el idioma del usuario (inglés, ruso, francés, español, portugués, árabe, amhárico).
 - NUNCA respondas completamente en hebreo, a menos que el usuario haya escrito en hebreo.
-- Si el usuario envía solo una palabra en hebreo (por ejemplo, un verbo), pero sus mensajes anteriores fueron en otra lengua (por ejemplo, español, inglés, etc.), SIEMPRE responde completamente en el idioma del usuario. Usa el hebreo solo para la palabra, sus formas y ejemplos. No uses hebreo para explicaciones ni para la estructura de la respuesta.
+- Si el usuario envía solo una palabra en hebreo (por ejemplo, un verbo), pero sus mensajes anteriores fueron en otro idioma (por ejemplo, español, inglés, etc.), SIEMPRE responde completamente en el idioma del usuario. Usa el hebreo solo para la palabra, sus formas y ejemplos. No uses hebreo para explicaciones ni para la estructura de la ответa.
 - Por defecto, escribe todo en hebreo SIN nikud (signos vocálicos).
 - Usa nikud SOLO si el usuario lo solicita, pregunta por pronunciación o signos vocálicos.
 - Si no estás seguro del idioma, pide al usuario que lo aclare.
@@ -363,7 +339,7 @@ Binyan: **PA'AL** (פָּעַל)
 **Arabic:**  
 المصدر: לשתות (_lishtot_)  
 الجذر: ש־ת־ה  
-البناء: **PA'AL** (פָּעַל)
+البناء: **PA'AL** (فָּעַל)
 
 ---
 
@@ -451,6 +427,7 @@ If user answers:
 → You must immediately show conjugation for the last discussed verb, including full metadata block and tenses.
 → Do not ask again which verb they mean.
 
+
 ✅ Always be clear, helpful, concise, and in the same language as the question.  
 ✅ Never switch languages mid-reply.  
 ✅ Never skip the infinitive / root / binyan metadata block.  
@@ -459,48 +436,69 @@ If user answers:
 ✅ Special Handling of One-Word or One-Verb Requests
 If the user sends a message that clearly contains a single verb (e.g., "переводить", "to cook", "apprendre", "ללכת", etc.) — it is considered on-topic and must be processed immediately.
 
+
 ✅ Do NOT ask “Would you like to see its conjugation?”
 ✅ Instead, reply directly with full explanation, metadata block, and conjugations.
 
 This applies even if the verb is not used in a sentence, e.g.:
 
 "Готовить"
+
 "To learn"
+
 "Cocinar"
+
 "Apprendre"
+
 "לנסוע"
 
 📌 IMPORTANT – One-Verb Requests Rule:
+
 If the user's message contains a single verb (even inside a longer phrase) and clearly relates to Hebrew, Hebrew grammar, Hebrew verbs, or conjugation, you must:
 
 ✅ Treat it immediately as a direct verb request.
 ✅ Directly respond with:
+
 Full verb metadata (Infinitive, Root, Binyan)
+
 Full conjugation (Present, Past, and Future tenses) ✅ Do not ask for confirmation or clarification.
 
 This applies to all supported languages (Russian, English, French, Spanish, Portuguese, Arabic, Amharic).
 
 📌 When to show a confirmation:
+
 You may offer confirmation only if:
+
 The user's request is clearly unrelated to Hebrew grammar or Hebrew verbs (e.g., about cooking, travel, general advice);
+
 A verb was extracted from an off-topic question just to assist learning.
 
 ✅ In such cases:
+
 Politely inform the user that the topic is not directly related to Hebrew.
+
 Offer to show the extracted verb conjugation.
+
 Wait for the user's answer ("Yes" or "No").
 
 📌 Notes:
+
 If the extracted verb is Hebrew, immediately use Hebrew conventions (Translation, Infinitive, Root, Binyan).
+
 Never delay or split the answer across multiple replies.
+
 Never confuse Hebrew letters (א ב ג ד ה ו...) with Amharic letters (ገ ጠ ዓ ነ...), even if the user message contains both.
 
 ✅ Summary:
+
 One-word verb? → Immediate full conjugation, no confirmation.
+
 Hebrew-related phrase? → Immediate conjugation.
+
 Off-topic phrase with verb inside? → Offer confirmation before conjugating.
 
 🧠 IDIOMS AND EXPRESSIONS HANDLING
+
 If the user's message contains a **common idiom, proverb, or slang expression** (in any supported language), you must:
 
 1. Recognize the expression (e.g., “It's raining cats and dogs”).
@@ -534,73 +532,33 @@ En hebreo se puede decir “ראשו בעננים” (_rosho ba'ananim_) – “
 IMPORTANT: Never insert raw objects, arrays, or JSON into the reply.
 
 If you include structured data (e.g. list of differences, examples, table, etc):
+
 ❌ Incorrect: \${differences}
+
 ✅ Correct:
 Key differences:
+
 First: ...
+
 Second: ...
+
 Use join('\\n') for arrays.
 For objects — enumerate each key and value as plain text.
+
 NEVER return [object Object] — always serialize or explain in natural language.
 
 ✅ STRUCTURE RULES
 Use full, clear sentences
+
 Each idea = new line or paragraph
+
 Do not mix subject/object in the same line
+
 Never combine broken or mixed-up structures
+
 Always rephrase to make human-readable and understandable
-`;
-// ========== конец system prompt ==========
-
-// ========== HTTP маршрут ==========
-app.post('/ask', async (req, res) => {
-  console.log('📥 Получен запрос от клиента:', req.body);
-
-  const { question, history = [], verbContext = '' } = req.body;
-
-  if (!question) {
-    console.warn('⚠️ Вопрос не передан!');
-    return res.status(400).json({ reply: 'Вопрос не передан' });
-  }
-
-  const normalized = String(question).trim().toLowerCase();
-
-  // Слова подтверждения (для оффтоп-кейсов с извлечением глагола)
-  const yesWords = [
-    'да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ',
-    'хочу', 'i want', 'je veux', 'quiero', 'eu quero', 'أريد', 'እፈልጋለሁ'
-  ];
-
-  const isConfirmation = yesWords.includes(normalized);
-
-  // Ключ кэша: для подтверждений учитываем verbContext
-  const cacheKey = isConfirmation
-    ? `CONFIRM:${(verbContext || '').toLowerCase()}`
-    : normalized;
-
-  const skipCache = isConfirmation;
-
-  if (!skipCache && cache.has(cacheKey)) {
-    console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
-    return res.json({ reply: cache.get(cacheKey) });
-  }
-
-  try {
-    console.log('🔗 Отправка запроса в OpenAI через каскад nano→mini...');
-
-    // Обрезаем историю (например, до 10 последних сообщений), чтобы экономить токены
-    const trimmedHistory = Array.isArray(history) ? history.slice(-10) : [];
-
-    let updatedHistory = [...trimmedHistory];
-
-    // При подтверждении добавляем verbContext как явный ввод пользователя
-    if (isConfirmation && verbContext) {
-      console.log('📌 Подтверждение — добавляем verbContext:', verbContext);
-      updatedHistory.push({ role: 'user', content: verbContext });
-    }
-
-    const cleanMessages = [
-      { role: 'system', content: SYSTEM_PROMPT },
+`,
+      },
       ...updatedHistory.map((msg) => ({
         role: msg.role,
         content: typeof msg.content === 'string'
@@ -615,8 +573,74 @@ app.post('/ask', async (req, res) => {
       },
     ];
 
-    // Каскадный запрос
-    const reply = await routedAsk(cleanMessages);
+    // ---------- ШАГ 1: построение плана ответом gpt-5 ----------
+    let planText = '';
+    try {
+      console.log('🧭 Запрашиваем план у планировщика:', PLANNER_MODEL);
+      const plannerMessages = [
+        {
+          role: 'system',
+          content:
+            'You are a planning assistant for a Hebrew tutor. Read the user input and produce a concise internal plan (5–10 short lines) for the final answer. ' +
+            'Cover: detected language, intent, what verb(s)/topics to address, sections to include (metadata block, tenses), tone and formatting rules. ' +
+            'Return plain text outline; DO NOT include explanations for the user; this plan is internal and must not be revealed.'
+        },
+        {
+          role: 'user',
+          content: typeof question === 'string' ? question : JSON.stringify(question)
+        }
+      ];
+
+      const planResponse = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          model: PLANNER_MODEL,
+          messages: plannerMessages,
+          reasoning_effort: 'medium',
+          verbosity: 'high',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      planText = planResponse.data?.choices?.[0]?.message?.content?.trim() || '';
+      if (planText) console.log('🧭 План ответа:\n' + planText);
+    } catch (e) {
+      console.warn('⚠️ Не удалось получить план от gpt-5:', e.response?.data || e.message);
+    }
+
+    // ---------- ШАГ 2: финальная генерация gpt-5-nano по плану ----------
+    // Если план есть — добавим его вторым system-сообщением, не раскрывая пользователю
+    const nanoMessages = planText
+      ? [
+          cleanMessages[0], // исходный system
+          { role: 'system', content: `Follow the internal plan below STRICTLY. Do NOT mention or reveal the plan in the final answer.\n\n${planText}` },
+          ...cleanMessages.slice(1) // история + user
+        ]
+      : cleanMessages;
+
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model,
+        messages: nanoMessages,
+        reasoning_effort: 'minimal', // или 'low' / 'medium' / 'high'
+        verbosity: 'medium',         // или 'low' / 'high'
+        // temperature: '0.7',       // этот параметр удалить — он больше не поддерживается!
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const reply = response.data.choices?.[0]?.message?.content?.trim();
 
     if (!reply) {
       console.warn('⚠️ OpenAI вернул пустой ответ!');
@@ -624,7 +648,7 @@ app.post('/ask', async (req, res) => {
     }
 
     cache.set(cacheKey, reply);
-    console.log('✅ Ответ получен (каскад)');
+    console.log('✅ Ответ получен от OpenAI');
     return res.status(200).json({ reply });
 
   } catch (error) {
