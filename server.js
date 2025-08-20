@@ -11,7 +11,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const cache = new Map();
 const model = 'gpt-5-nano';
 
-// ===== System prompt (язык, одно слово на иврите, off-topic-фильтр) =====
+/* ========================= SYSTEM PROMPT ========================= */
 const SYSTEM_PROMPT = `
 Developer: # Role and Objective
 Hebrew Tutor Assistant — Help users learn the Hebrew language and grammar, especially verbs, in a friendly, clear, and beginner-focused style. Support answers in the user's language (English, Russian, French, Spanish, Portuguese, Arabic, or Amharic).
@@ -55,9 +55,9 @@ Respond to questions involving:
 - Never output raw arrays/objects/JSON — all data must be presented as plain, natural text.
 
 # Off-topic/Non-Hebrew Questions (Filter)
-- If the question is not about Hebrew (e.g., “When were the pyramids built?”), reply briefly in the user’s language that the topic is outside Hebrew tutoring.
+- If the question is not about Hebrew, reply briefly in the user’s language that the topic is outside Hebrew tutoring.
 - If the text already contains verbs: extract them (1–2 most relevant). If there are 2+ verbs — ask whether to conjugate one or all; if 1 verb — show one-line form and offer full conjugation.
-- If there are no verbs: infer 1–2 relevant learning verbs by association (e.g., картина/picture → **לצייר** (_letsayer_) — “рисовать / to draw”; самолёт/airplane → **לטוס** (_latus_) — “летать / to fly”) and ask which to conjugate.
+- If there are no verbs: infer 1–2 relevant learning verbs by association (e.g., картина/picture → **לצייר** (_letsayer_) — “рисовать / to draw”; airplane → **לטוס** (_latus_) — “to fly”) and ask which to conjugate.
 
 # Idiom/Expression Handling
 Explain in the user's language, provide a close Hebrew equivalent (Hebrew + transliteration + meaning), or a literal translation if no equivalent exists.
@@ -80,7 +80,8 @@ Use Markdown. Ensure clarity and correct linguistic conventions. No raw JSON.
 Keep replies concise and focused. Use fully expanded, easy-to-read blocks for conjugations.
 `;
 
-// ===== Языковые утилиты =====
+/* ========================= LANGUAGE UTILS ========================= */
+
 const LANG_MAP = {
   en: 'English',
   ru: 'Russian',
@@ -92,14 +93,49 @@ const LANG_MAP = {
   he: 'Hebrew',
 };
 
-function detectLangLabel(str = '') {
-  if (/[А-Яа-яЁё]/.test(str)) return 'Russian';
-  if (/[\u0590-\u05FF]/.test(str)) return 'Hebrew';
-  if (/[À-ÿ]/i.test(str) && /(?:\b(le|la|les|des|un|une|du|de la)\b)/i.test(str)) return 'French';
-  if (/[ÁÉÍÓÚÑáéíóúñ¿¡]/.test(str)) return 'Spanish';
-  if (/\b(o|a|os|as|um|uma|de|que)\b/i.test(str)) return 'Portuguese';
-  if (/[اأإآء-ي]/.test(str)) return 'Arabic';
-  if (/[ዐ-፟]/.test(str)) return 'Amharic';
+// Count characters by script
+function scriptCounts(str = '') {
+  return {
+    he: (str.match(/[\u0590-\u05FF]/g) || []).length,
+    ru: (str.match(/[А-Яа-яЁё]/g) || []).length,
+    ar: (str.match(/[اأإآء-ي]/g) || []).length,
+    am: (str.match(/[ዐ-፟]/g) || []).length,
+    lat: (str.match(/[A-Za-z]/g) || []).length,
+  };
+}
+
+// Latin-language stopwords (rough)
+const EN_SW = /\b(the|and|to|is|you|of|in|for|on|with|as|this|that|it|pick|items|each|note|example)\b/i;
+const FR_SW = /\b(le|la|les|des|du|de|un|une|est|avec|pour|sur|et|que)\b/i;
+const ES_SW = /\b(el|la|los|las|de|que|y|en|un|una|es|con|para|del|al)\b/i;
+const PT_SW = /\b(o|a|os|as|de|que|e|em|um|uma|é|com|para|no|na|dos|das)\b/i;
+
+function detectLangLabelMixed(str = '') {
+  const s = String(str);
+  const { he, ru, ar, am, lat } = scriptCounts(s);
+
+  // Pure script cases first
+  if (he > 0 && lat === 0 && ru === 0 && ar === 0 && am === 0) return 'Hebrew';
+  if (ru > 0 && he === 0 && lat === 0 && ar === 0 && am === 0) return 'Russian';
+  if (ar > 0 && he === 0 && lat === 0 && ru === 0 && am === 0) return 'Arabic';
+  if (am > 0 && he === 0 && lat === 0 && ru === 0 && ar === 0) return 'Amharic';
+
+  // Mixed cases with Latin present → choose Latin language by stopwords (prefer EN)
+  if (lat > 0) {
+    if (EN_SW.test(s)) return 'English';
+    if (ES_SW.test(s)) return 'Spanish';
+    if (PT_SW.test(s)) return 'Portuguese';
+    if (FR_SW.test(s)) return 'French';
+    // Latin but no strong stopwords → fallback: English
+    return 'English';
+  }
+
+  // No Latin, mixed among others → choose the dominant count
+  const max = Math.max(he, ru, ar, am);
+  if (max === he) return 'Hebrew';
+  if (max === ru) return 'Russian';
+  if (max === ar) return 'Arabic';
+  if (max === am) return 'Amharic';
   return 'English';
 }
 
@@ -110,53 +146,41 @@ function isSingleHebrewToken(str = '') {
 }
 
 function detectChatLanguageFromHistory(history = [], fallback = 'English') {
-  // приоритет: последние user-сообщения
+  // prefer last user messages (non-Hebrew)
   for (let i = history.length - 1; i >= 0; i--) {
     const m = history[i];
     if (!m || m.role !== 'user' || !m.content) continue;
     const text = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
-    const lang = detectLangLabel(text);
+    const lang = detectLangLabelMixed(text);
     if (lang && lang !== 'Hebrew') return lang;
   }
-  // иначе любое сообщение (как запасной вариант)
+  // else any message
   for (let i = history.length - 1; i >= 0; i--) {
     const m = history[i];
     if (!m || !m.content) continue;
     const text = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
-    const lang = detectLangLabel(text);
+    const lang = detectLangLabelMixed(text);
     if (lang && lang !== 'Hebrew') return lang;
   }
   return fallback;
 }
 
-// ——— эвристики языка (доп. защита от «прыжка» в PT/ES/FR) ———
+// Additional guards for “language drift”
 function hasDiacritics(text = '') {
   return /[áéíóúñçàèìòùâêîôûäëïöüœæãõ]/i.test(text);
 }
-function hasPT(text = '') {
-  return /\b(o|a|os|as|de|que|é|com|para|uma|um|no|na|dos|das)\b/i.test(text);
-}
-function hasES(text = '') {
-  return /\b(el|la|los|las|de|que|es|con|para|una|un|del|al)\b/i.test(text);
-}
-function hasFR(text = '') {
-  return /\b(le|la|les|des|du|de|un|une|est|avec|pour|sur)\b/i.test(text);
-}
-
 function looksLikeLanguage(text = '', target = 'English') {
   if (target === 'Russian') return /[А-Яа-яЁё]/.test(text);
   if (target === 'Arabic') return /[اأإآء-ي]/.test(text);
   if (target === 'Amharic') return /[ዐ-፟]/.test(text);
   if (target === 'Hebrew') return /[\u0590-\u05FF]/.test(text);
-  if (target === 'French') return /\b(le|la|les|des|de|un|une|est|et)\b/i.test(text);
-  if (target === 'Spanish') return /\b(el|la|los|las|de|que|y|en|un|una|es|con|para)\b/i.test(text);
-  if (target === 'Portuguese') return /\b(o|a|os|as|de|que|e|em|um|uma|é|com|para)\b/i.test(text);
+  if (target === 'French') return FR_SW.test(text);
+  if (target === 'Spanish') return ES_SW.test(text);
+  if (target === 'Portuguese') return PT_SW.test(text);
   // English:
-  return /\b(the|and|to|is|you|of|in|for|on|with|as|this|that|it)\b/i.test(text);
+  return EN_SW.test(text) || /[A-Za-z]/.test(text);
 }
-
 function containsForbiddenForTarget(text = '', target = 'English') {
-  const hasHeb = /[\u0590-\u05FF]/.test(text); // Hebrew разрешён всегда для слов/примеров
   const hasAra = /[اأإآء-ي]/.test(text);
   const hasCyr = /[А-Яа-яЁё]/.test(text);
   const hasAmh = /[ዐ-፟]/.test(text);
@@ -165,21 +189,20 @@ function containsForbiddenForTarget(text = '', target = 'English') {
   if (target !== 'Russian' && hasCyr) return true;
   if (target !== 'Amharic' && hasAmh) return true;
 
-  // для English отдельно ловим латинские романские маркеры
   if (target === 'English') {
     if (hasDiacritics(text)) return true;
-    if (hasPT(text) || hasES(text) || hasFR(text)) return true;
+    if (FR_SW.test(text) || ES_SW.test(text) || PT_SW.test(text)) return true;
   }
   return false;
 }
 
-// 🧹 Очистка кэша раз в 10 минут
+/* ========================= CACHE TTL ========================= */
 setInterval(() => {
   cache.clear();
   console.log('🧹 Кэш очищен автоматически (TTL)');
 }, 10 * 60 * 1000);
 
-// ===== Маршрут =====
+/* ========================= ROUTE ========================= */
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
 
@@ -218,15 +241,22 @@ app.post('/ask', async (req, res) => {
       updatedHistory.push({ role: 'user', content: String(verbContext) });
     }
 
-    // ---- жёсткий выбор целевого языка
+    // 1) explicit lang from client
     let L = LANG_MAP?.[String(chatLang || '').toLowerCase()] || null;
+
+    // 2) auto-detect with robust mixed-text logic
     const sourceForLang = (isConfirmation && verbContext) ? String(verbContext) : String(question);
     const singleHebrew = isSingleHebrewToken(sourceForLang);
 
     if (!L) {
       L = singleHebrew
-        ? detectChatLanguageFromHistory(updatedHistory, 'English') // в англ. чате даст English
-        : detectLangLabel(sourceForLang);
+        ? detectChatLanguageFromHistory(updatedHistory, 'English') // “one Hebrew word” → use chat language
+        : detectLangLabelMixed(sourceForLang);
+    }
+
+    // Safety: if model guessed Hebrew but message is mixed with strong English markers → force English
+    if (L === 'Hebrew' && (/[A-Za-z]/.test(sourceForLang) && EN_SW.test(sourceForLang))) {
+      L = 'English';
     }
 
     const languageLockMsg = {
@@ -249,7 +279,7 @@ app.post('/ask', async (req, res) => {
       },
     ];
 
-    // ---- первичная генерация
+    // ---- primary generation
     let response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
@@ -268,9 +298,8 @@ app.post('/ask', async (req, res) => {
 
     let reply = response.data?.choices?.[0]?.message?.content?.trim() || '';
 
-    // ---- пост-валидация: запрещённые скрипты/маркеры для целевого языка
+    // ---- post-validation & one or two-step rewrite if needed
     let needRewrite = containsForbiddenForTarget(reply, L) || !looksLikeLanguage(reply, L);
-
     if (needRewrite) {
       console.log('🛠️ Переписываем ответ строго на целевом языке:', L);
       const rewriteMessages = [
@@ -304,7 +333,7 @@ app.post('/ask', async (req, res) => {
       );
       reply = rewriteResp.data?.choices?.[0]?.message?.content?.trim() || reply;
 
-      // повторная проверка
+      // check again
       needRewrite = containsForbiddenForTarget(reply, L) || !looksLikeLanguage(reply, L);
       if (needRewrite) {
         console.log('🔁 Доп. шаг: дословный перевод-перезапись в целевой язык:', L);
@@ -343,7 +372,7 @@ app.post('/ask', async (req, res) => {
     }
 
     cache.set(cacheKey, reply);
-    console.log('✅ Ответ получен от OpenAI (lang =', L, ')');
+    console.log(`✅ Ответ получен от OpenAI (lang = ${L})`);
     return res.status(200).json({ reply });
 
   } catch (error) {
