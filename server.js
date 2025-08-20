@@ -11,84 +11,9 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const cache = new Map();
 const model = 'gpt-5-nano';
 
-
-// 🧹 Автоматическая очистка кэша раз в 10 минут
-setInterval(() => {
-  cache.clear();
-  console.log('🧹 Кэш очищен автоматически (TTL)');
-}, 10 * 60 * 1000); // 10 минут
-
-app.post('/ask', async (req, res) => {
-  console.log('📥 Получен запрос от клиента:', req.body);
-
-  const { question, history = [], verbContext = '' } = req.body;
-
-  if (!question) {
-    console.warn('⚠️ Вопрос не передан!');
-    return res.status(400).json({ reply: 'Вопрос не передан' });
-  }
-
-  const normalized = question.trim().toLowerCase();
-
-  const yesWords = [
-    'да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ',
-    'хочу', 'i want', 'je veux', 'quiero', 'eu quero', 'أريد', 'እፈልጋለሁ'
-  ];
-
-  function detectLangLabel(str='') {
-  if (/[А-Яа-яЁё]/.test(str)) return 'Russian';
-  if (/[\u0590-\u05FF]/.test(str)) return 'Hebrew';
-  if (/[À-ÿ]/i.test(str) && /(?:le|la|les|des|un|une)\b/i.test(str)) return 'French';
-  if (/[ÁÉÍÓÚÑáéíóúñ]/.test(str)) return 'Spanish';
-  if (/\b(o|a|os|as|um|uma|de|que)\b/i.test(str)) return 'Portuguese';
-  if (/[اأإآء-ي]/.test(str)) return 'Arabic';
-  if (/[ዐ-፟]/.test(str)) return 'Amharic';
-  return 'English';
-}
-
-// В /ask перед формированием messages:
-const L = detectLangLabel(question);
-const languageLockMsg = {
-  role: 'system',
-  content: `TARGET LANGUAGE = ${L}. Output MUST be 100% in ${L}. Translations and metadata labels MUST be in ${L}.`
-};
-
-// и затем:
-const cleanMessages = [
-  { role: 'system', content: SYSTEM_PROMPT },
-  languageLockMsg,
-  ...historyMapped,
-  { role: 'user', content: questionStr },
-];
-
-
-  const isConfirmation = yesWords.includes(normalized);
-
-  const cacheKey = isConfirmation
-    ? `CONFIRM:${verbContext?.toLowerCase()}`
-    : normalized;
-
-  const skipCache = isConfirmation;
-
-  if (!skipCache && cache.has(cacheKey)) {
-    console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
-    return res.json({ reply: cache.get(cacheKey) });
-  }
-
-  try {
-    console.log('🔗 Отправка запроса в OpenAI...');
-    console.log('📦 Используем модель:', model);
-
-    let updatedHistory = [...history];
-
-    if (isConfirmation && verbContext) {
-      console.log('📌 Подтверждение — добавляем verbContext:', verbContext);
-      updatedHistory.push({ role: 'user', content: verbContext });
-    }
-    const cleanMessages = [
-      {
-        role: 'system',
-        content: `Developer: # Role and Objective
+// === System prompt (жёсткие правила языка, одно слово на иврите, off-topic фильтр) ===
+const SYSTEM_PROMPT = `
+Developer: # Role and Objective
 Hebrew Tutor Assistant — Help users learn the Hebrew language and grammar, especially verbs, in a friendly, clear, and beginner-focused style. Support answers in the user's language (English, Russian, French, Spanish, Portuguese, Arabic, or Amharic).
 
 # Planning
@@ -172,32 +97,97 @@ Always use Markdown for formatting. Structure output as described above. Ensure 
 # Agentic Eagerness
 - Always proceed with full explanations when a direct Hebrew-related or one-verb request is detected.
 - Ask for clarification only when language or intent is truly unclear.
-`,
-      },
+`;
+
+// --- Грубый детектор языка для якоря ---
+function detectLangLabel(str = '') {
+  if (/[А-Яа-яЁё]/.test(str)) return 'Russian';
+  if (/[\u0590-\u05FF]/.test(str)) return 'Hebrew';
+  if (/[À-ÿ]/i.test(str) && /(?:\b(le|la|les|des|un|une|du|de la)\b)/i.test(str)) return 'French';
+  if (/[ÁÉÍÓÚÑáéíóúñ]/.test(str)) return 'Spanish';
+  if (/\b(o|a|os|as|um|uma|de|que)\b/i.test(str)) return 'Portuguese';
+  if (/[اأإآء-ي]/.test(str)) return 'Arabic';
+  if (/[ዐ-፟]/.test(str)) return 'Amharic';
+  return 'English';
+}
+
+// 🧹 Очистка кэша раз в 10 минут
+setInterval(() => {
+  cache.clear();
+  console.log('🧹 Кэш очищен автоматически (TTL)');
+}, 10 * 60 * 1000);
+
+app.post('/ask', async (req, res) => {
+  console.log('📥 Получен запрос от клиента:', req.body);
+
+  const { question, history = [], verbContext = '' } = req.body || {};
+  if (!question) {
+    console.warn('⚠️ Вопрос не передан!');
+    return res.status(400).json({ reply: 'Вопрос не передан' });
+  }
+
+  const normalized = String(question).trim().toLowerCase();
+  const yesWords = [
+    'да', 'yes', 'oui', 'sí', 'sim', 'نعم', 'አዎ',
+    'хочу', 'i want', 'je veux', 'quiero', 'eu quero', 'أريد', 'እፈልጋለሁ'
+  ];
+  const isConfirmation = yesWords.includes(normalized);
+
+  const cacheKey = isConfirmation
+    ? `CONFIRM:${String(verbContext || '').toLowerCase()}`
+    : normalized;
+
+  const skipCache = isConfirmation;
+
+  if (!skipCache && cache.has(cacheKey)) {
+    console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
+    return res.json({ reply: cache.get(cacheKey) });
+  }
+
+  try {
+    console.log('🔗 Отправка запроса в OpenAI...');
+    console.log('📦 Используем модель:', model);
+
+    // Берём только последние 10 сообщений истории
+    const trimmedHistory = Array.isArray(history) ? history.slice(-10) : [];
+    let updatedHistory = [...trimmedHistory];
+
+    // Если это подтверждение — добавляем исходный контекст глагола
+    if (isConfirmation && verbContext) {
+      console.log('📌 Подтверждение — добавляем verbContext:', verbContext);
+      updatedHistory.push({ role: 'user', content: String(verbContext) });
+    }
+
+    // Якорь языка на основе текущего вопроса (или verbContext при подтверждении)
+    const sourceForLang = (isConfirmation && verbContext) ? String(verbContext) : String(question);
+    const L = detectLangLabel(sourceForLang);
+    const languageLockMsg = {
+      role: 'system',
+      content: `TARGET LANGUAGE = ${L}. Output MUST be 100% in ${L}. Translations and metadata labels MUST be in ${L}. Do NOT use any other language in explanations.`,
+    };
+
+    // Сборка сообщений (один system-подсказ + якорь + история + вопрос)
+    const cleanMessages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      languageLockMsg,
       ...updatedHistory.map((msg) => ({
         role: msg.role,
-        content: typeof msg.content === 'string'
-          ? msg.content
-          : JSON.stringify(msg.content),
+        content: typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content),
       })),
       {
         role: 'user',
-        content: typeof question === 'string'
-          ? question
-          : JSON.stringify(question),
+        content: typeof question === 'string' ? question : JSON.stringify(question),
       },
     ];
 
-    
-
+    // Единственный запрос к gpt-5-nano
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
         model,
         messages: cleanMessages,
-        reasoning_effort: 'low', // или 'minimal' / 'medium' / 'high'
-        verbosity: 'medium',         // или 'low' / 'high'
-        // temperature: '0.7',       // этот параметр удалить — он больше не поддерживается!
+        reasoning_effort: 'low',   // можно 'minimal' для ещё большей скорости
+        verbosity: 'medium',
       },
       {
         headers: {
@@ -207,8 +197,7 @@ Always use Markdown for formatting. Structure output as described above. Ensure 
       }
     );
 
-    const reply = response.data.choices?.[0]?.message?.content?.trim();
-
+    const reply = response.data?.choices?.[0]?.message?.content?.trim();
     if (!reply) {
       console.warn('⚠️ OpenAI вернул пустой ответ!');
       return res.status(500).json({ reply: 'Пустой ответ от ChatGPT' });
@@ -225,7 +214,6 @@ Always use Markdown for formatting. Structure output as described above. Ensure 
 });
 
 const PORT = process.env.PORT || 3001;
-
 app.listen(PORT, () => {
   console.log(`🚀 Сервер работает: http://localhost:${PORT}`);
 });
