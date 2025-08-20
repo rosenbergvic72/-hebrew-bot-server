@@ -111,6 +111,34 @@ function detectLangLabel(str = '') {
   return 'English';
 }
 
+// --- Одно слово на иврите? ---
+function isSingleHebrewToken(str = '') {
+  const s = String(str).trim();
+  if (!s || /\s/.test(s)) return false; // есть пробелы — уже не одно слово
+  return /^[\u0590-\u05FF\u0591-\u05C7]+$/.test(s); // только еврейские буквы/никуд
+}
+
+// --- Определяем язык чата по истории, если последнее сообщение — одно слово на иврите ---
+function detectChatLanguageFromHistory(history = [], fallback = 'Russian') {
+  // 1) сначала по последним сообщениям пользователя
+  for (let i = history.length - 1; i >= 0; i--) {
+    const m = history[i];
+    if (!m || m.role !== 'user' || !m.content) continue;
+    const text = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
+    const lang = detectLangLabel(text);
+    if (lang && lang !== 'Hebrew') return lang;
+  }
+  // 2) если не нашли — смотрим любые сообщения
+  for (let i = history.length - 1; i >= 0; i--) {
+    const m = history[i];
+    if (!m || !m.content) continue;
+    const text = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
+    const lang = detectLangLabel(text);
+    if (lang && lang !== 'Hebrew') return lang;
+  }
+  return fallback; // дефолт: Russian (можно сменить на English при желании)
+}
+
 // 🧹 Очистка кэша раз в 10 минут
 setInterval(() => {
   cache.clear();
@@ -148,25 +176,31 @@ app.post('/ask', async (req, res) => {
     console.log('🔗 Отправка запроса в OpenAI...');
     console.log('📦 Используем модель:', model);
 
-    // Берём только последние 10 сообщений истории
+    // берём только последние 10 сообщений истории
     const trimmedHistory = Array.isArray(history) ? history.slice(-10) : [];
     let updatedHistory = [...trimmedHistory];
 
-    // Если это подтверждение — добавляем исходный контекст глагола
+    // если это подтверждение — добавляем исходный контекст глагола
     if (isConfirmation && verbContext) {
       console.log('📌 Подтверждение — добавляем verbContext:', verbContext);
       updatedHistory.push({ role: 'user', content: String(verbContext) });
     }
 
-    // Якорь языка на основе текущего вопроса (или verbContext при подтверждении)
+    // язык ответа: если одно слово на иврите — брать язык чата из истории
     const sourceForLang = (isConfirmation && verbContext) ? String(verbContext) : String(question);
-    const L = detectLangLabel(sourceForLang);
+    const singleHebrew = isSingleHebrewToken(sourceForLang);
+    const L = singleHebrew
+      ? detectChatLanguageFromHistory(updatedHistory, 'Russian')
+      : detectLangLabel(sourceForLang);
+
     const languageLockMsg = {
       role: 'system',
-      content: `TARGET LANGUAGE = ${L}. Output MUST be 100% in ${L}. Translations and metadata labels MUST be in ${L}. Do NOT use any other language in explanations.`,
+      content: singleHebrew
+        ? `TARGET LANGUAGE = ${L}. The last user message is a SINGLE Hebrew token. Still respond 100% in ${L}. Use Hebrew ONLY for the word itself, its forms, and examples. Do NOT use Hebrew in explanations unless TARGET LANGUAGE is Hebrew.`
+        : `TARGET LANGUAGE = ${L}. Output MUST be 100% in ${L}. Translations and metadata labels MUST be in ${L}. Do NOT use any other language in explanations.`,
     };
 
-    // Сборка сообщений (один system-подсказ + якорь + история + вопрос)
+    // сборка сообщений (system + якорь + история + вопрос)
     const cleanMessages = [
       { role: 'system', content: SYSTEM_PROMPT },
       languageLockMsg,
@@ -180,13 +214,13 @@ app.post('/ask', async (req, res) => {
       },
     ];
 
-    // Единственный запрос к gpt-5-nano
+    // единственный запрос к gpt-5-nano
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
         model,
         messages: cleanMessages,
-        reasoning_effort: 'low',   // можно 'minimal' для ещё большей скорости
+        reasoning_effort: 'low', // можно 'minimal' для ещё большей скорости
         verbosity: 'medium',
       },
       {
