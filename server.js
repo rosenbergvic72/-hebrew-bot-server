@@ -10,7 +10,7 @@ app.use(express.json());
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const cache = new Map();
 const model = 'gpt-5-nano';
-const PLANNER_MODEL = 'gpt-5'; // модель для построения плана
+
 
 // 🧹 Автоматическая очистка кэша раз в 10 минут
 setInterval(() => {
@@ -573,62 +573,14 @@ Always rephrase to make human-readable and understandable
       },
     ];
 
-    // ---------- ШАГ 1: построение плана ответом gpt-5 ----------
-    let planText = '';
-    try {
-      console.log('🧭 Запрашиваем план у планировщика:', PLANNER_MODEL);
-      const plannerMessages = [
-        {
-          role: 'system',
-          content:
-            'You are a planning assistant for a Hebrew tutor. Read the user input and produce a concise internal plan (5–10 short lines) for the final answer. ' +
-            'Cover: detected language, intent, what verb(s)/topics to address, sections to include (metadata block, tenses), tone and formatting rules. ' +
-            'Return plain text outline; DO NOT include explanations for the user; this plan is internal and must not be revealed.'
-        },
-        {
-          role: 'user',
-          content: typeof question === 'string' ? question : JSON.stringify(question)
-        }
-      ];
-
-      const planResponse = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
-        {
-          model: PLANNER_MODEL,
-          messages: plannerMessages,
-          reasoning_effort: 'medium',
-          verbosity: 'high',
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      planText = planResponse.data?.choices?.[0]?.message?.content?.trim() || '';
-      if (planText) console.log('🧭 План ответа:\n' + planText);
-    } catch (e) {
-      console.warn('⚠️ Не удалось получить план от gpt-5:', e.response?.data || e.message);
-    }
-
-    // ---------- ШАГ 2: финальная генерация gpt-5-nano по плану ----------
-    // Если план есть — добавим его вторым system-сообщением, не раскрывая пользователю
-    const nanoMessages = planText
-      ? [
-          cleanMessages[0], // исходный system
-          { role: 'system', content: `Follow the internal plan below STRICTLY. Do NOT mention or reveal the plan in the final answer.\n\n${planText}` },
-          ...cleanMessages.slice(1) // история + user
-        ]
-      : cleanMessages;
+    
 
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
         model,
-        messages: nanoMessages,
-        reasoning_effort: 'minimal', // или 'low' / 'medium' / 'high'
+        messages: cleanMessages,
+        reasoning_effort: 'low', // или 'minimal' / 'medium' / 'high'
         verbosity: 'medium',         // или 'low' / 'high'
         // temperature: '0.7',       // этот параметр удалить — он больше не поддерживается!
       },
