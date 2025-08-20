@@ -54,62 +54,30 @@ Respond to questions involving:
 - Never include HTML.
 - Never output raw arrays/objects/JSON — all data must be presented as plain, natural text.
 
-# Tool Usage Policy
-Use only the functionality described herein; do not invoke any external tools or APIs. For all other needs, clarify with the user.
-
 # Off-topic/Non-Hebrew Questions (Filter)
 - If the question is not about Hebrew (e.g., “When were the pyramids built?”), reply briefly in the user’s language that the topic is outside Hebrew tutoring.
-
-- Then analyze the user’s text in their language:
-  • If it already contains verbs: extract them (1–2 most relevant).
-    – If there are 2+ verbs, list them in the user’s language and ask whether they want conjugation for one specific verb or all of them.
-    – If there is exactly 1 verb, show the one-line format immediately and ask for confirmation to provide full conjugation:
-      **<Hebrew infinitive>** (_transliteration_) — “<short gloss in the user’s language>”.
-
-  • If there are no verbs in the query: infer 1–2 highly relevant learning verbs from prominent nouns/adjectives (by common associations). Examples:
-    – картина / picture → **לצייר** (_letsayer_) — “рисовать / to draw”
-    – самолёт / airplane → **לטוס** (_latus_) — “летать / to fly”
-    – еда / food → **לבשל** (_levashel_) — “готовить / to cook”
-    – поездка / travel → **לנסוע** (_linsoa_) — “ехать / to travel”
-    – музыка / music → **לנגן** (_lenagen_) — “играть (на инструменте)”
-    Present 1 best-guess verb (optionally 1 alternative) in the same one-line format and ask which verb to conjugate.
-
-- On user confirmation (Yes/Да/Oui/Sí/Sim/نعم/አዎ), provide full conjugation immediately following the format rules. If they decline, stop politely.
+- If the text already contains verbs: extract them (1–2 most relevant). If there are 2+ verbs — ask whether to conjugate one or all; if 1 verb — show one-line form and offer full conjugation.
+- If there are no verbs: infer 1–2 relevant learning verbs by association (e.g., картина/picture → **לצייר** (_letsayer_) — “рисовать / to draw”; самолёт/airplane → **לטוס** (_latus_) — “летать / to fly”) and ask which to conjugate.
 
 # Idiom/Expression Handling
-1. Recognize idioms, proverbs, and slang in all supported languages.
-2. Explain meaning in the user's language.
-3. Provide closest Hebrew equivalent (with the phrase in Hebrew, transliteration, and its meaning).
-4. If no direct equivalent exists, say so and give a literal translation.
-5. If relevant verbs are present, provide their conjugation as usual (only if the user asked for it or after confirmation for off-topic contexts).
+Explain in the user's language, provide a close Hebrew equivalent (Hebrew + transliteration + meaning), or a literal translation if no equivalent exists.
 
 # Language Detection
 - The primary response language must match that of the last user message.
-- Single-word Hebrew input rule: when the last user message is in a supported non-Hebrew language but contains a single Hebrew token, treat the detected language as that non-Hebrew language and respond entirely in it.
-- If the message is in Amharic script, always reply in Amharic (never Hebrew).
+- Single-word Hebrew input rule: when the last user message is a single Hebrew token but the chat is in another supported language, respond entirely in that language; use Hebrew only for the word and forms.
+- If Amharic script is detected, reply in Amharic (never Hebrew in explanations).
 - If unclear, ask for clarification.
-- Use Unicode/script checks to distinguish Hebrew from Amharic and other supported languages.
 
 # Output Structure
-Always use Markdown for formatting. Structure output as described above. Ensure clarity, separation between sections, and correct linguistic conventions. Never output code, arrays, or non-human-readable content.
+Use Markdown. Ensure clarity and correct linguistic conventions. No raw JSON.
 
 # Post-action Validation
-- Verify that the response language matches the user’s detected language.
-- Check that the verb metadata and required conjugations are included when a single verb is requested.
-- For off-topic inputs, confirm that you included: (a) a brief off-topic notice in the user’s language, (b) one Hebrew verb with transliteration and a short gloss, and (c) an explicit offer to provide full conjugation upon confirmation.
+- Ensure response language matches the user’s language.
+- Ensure required metadata/conjugations are present for single-verb requests.
+- For off-topic inputs: include a brief off-topic notice + one Hebrew verb with transliteration + offer full conjugation.
 
 # Verbosity
-- Keep replies clear, concise, and focused.
-- For conjugation tables, use fully expanded, easy-to-read blocks.
-
-# Stop Conditions
-- Consider the response complete if all relevant verb metadata and conjugations are presented, or if the requested topic is explained clearly (including idioms/expressions).
-- For off-topic queries with a verb extracted, stop after confirmation and full conjugation (if confirmation is granted).
-- Never output split, partial, or deferred responses.
-
-# Agentic Eagerness
-- Always proceed with full explanations when a direct Hebrew-related or one-verb request is detected.
-- Ask for clarification only when language or intent is truly unclear.
+Keep replies concise and focused. Use fully expanded, easy-to-read blocks for conjugations.
 `;
 
 // ===== Языковые утилиты =====
@@ -142,6 +110,7 @@ function isSingleHebrewToken(str = '') {
 }
 
 function detectChatLanguageFromHistory(history = [], fallback = 'English') {
+  // приоритет: последние user-сообщения
   for (let i = history.length - 1; i >= 0; i--) {
     const m = history[i];
     if (!m || m.role !== 'user' || !m.content) continue;
@@ -149,6 +118,7 @@ function detectChatLanguageFromHistory(history = [], fallback = 'English') {
     const lang = detectLangLabel(text);
     if (lang && lang !== 'Hebrew') return lang;
   }
+  // иначе любое сообщение (как запасной вариант)
   for (let i = history.length - 1; i >= 0; i--) {
     const m = history[i];
     if (!m || !m.content) continue;
@@ -159,32 +129,51 @@ function detectChatLanguageFromHistory(history = [], fallback = 'English') {
   return fallback;
 }
 
-// ——— Пост-валидация и форс-переписывание, если «уплыл» язык ———
+// ——— эвристики языка (доп. защита от «прыжка» в PT/ES/FR) ———
+function hasDiacritics(text = '') {
+  return /[áéíóúñçàèìòùâêîôûäëïöüœæãõ]/i.test(text);
+}
+function hasPT(text = '') {
+  return /\b(o|a|os|as|de|que|é|com|para|uma|um|no|na|dos|das)\b/i.test(text);
+}
+function hasES(text = '') {
+  return /\b(el|la|los|las|de|que|es|con|para|una|un|del|al)\b/i.test(text);
+}
+function hasFR(text = '') {
+  return /\b(le|la|les|des|du|de|un|une|est|avec|pour|sur)\b/i.test(text);
+}
+
 function looksLikeLanguage(text = '', target = 'English') {
   if (target === 'Russian') return /[А-Яа-яЁё]/.test(text);
   if (target === 'Arabic') return /[اأإآء-ي]/.test(text);
   if (target === 'Amharic') return /[ዐ-፟]/.test(text);
   if (target === 'Hebrew') return /[\u0590-\u05FF]/.test(text);
-  if (target === 'French') return /\b(le|la|les|des|un|une|du|de|et|que|est)\b/i.test(text);
+  if (target === 'French') return /\b(le|la|les|des|de|un|une|est|et)\b/i.test(text);
   if (target === 'Spanish') return /\b(el|la|los|las|de|que|y|en|un|una|es|con|para)\b/i.test(text);
   if (target === 'Portuguese') return /\b(o|a|os|as|de|que|e|em|um|uma|é|com|para)\b/i.test(text);
-  if (target === 'English') return /\b(the|and|to|is|you|of|in|for|on|with|as)\b/i.test(text);
-  return true;
+  // English:
+  return /\b(the|and|to|is|you|of|in|for|on|with|as|this|that|it)\b/i.test(text);
 }
 
-function containsForeignScripts(text = '', target = 'English') {
-  const hasHeb = /[\u0590-\u05FF]/.test(text);
+function containsForbiddenForTarget(text = '', target = 'English') {
+  const hasHeb = /[\u0590-\u05FF]/.test(text); // Hebrew разрешён всегда для слов/примеров
   const hasAra = /[اأإآء-ي]/.test(text);
   const hasCyr = /[А-Яа-яЁё]/.test(text);
   const hasAmh = /[ዐ-፟]/.test(text);
-  if (target !== 'Hebrew' && hasHeb) return true;
+
   if (target !== 'Arabic' && hasAra) return true;
   if (target !== 'Russian' && hasCyr) return true;
   if (target !== 'Amharic' && hasAmh) return true;
+
+  // для English отдельно ловим латинские романские маркеры
+  if (target === 'English') {
+    if (hasDiacritics(text)) return true;
+    if (hasPT(text) || hasES(text) || hasFR(text)) return true;
+  }
   return false;
 }
 
-// 🧹 Очистка кэша каждые 10 минут
+// 🧹 Очистка кэша раз в 10 минут
 setInterval(() => {
   cache.clear();
   console.log('🧹 Кэш очищен автоматически (TTL)');
@@ -229,19 +218,16 @@ app.post('/ask', async (req, res) => {
       updatedHistory.push({ role: 'user', content: String(verbContext) });
     }
 
-    // 1) Язык из клиента (если прислали chatLang)
+    // ---- жёсткий выбор целевого языка
     let L = LANG_MAP?.[String(chatLang || '').toLowerCase()] || null;
-
-    // 2) Если не прислали — авто-детект с правилом «одно слово на иврите → язык чата»
     const sourceForLang = (isConfirmation && verbContext) ? String(verbContext) : String(question);
     const singleHebrew = isSingleHebrewToken(sourceForLang);
+
     if (!L) {
       L = singleHebrew
-        ? detectChatLanguageFromHistory(updatedHistory, 'English')
+        ? detectChatLanguageFromHistory(updatedHistory, 'English') // в англ. чате даст English
         : detectLangLabel(sourceForLang);
     }
-    // Если прислали 'he', но сообщение не на иврите — не насилуем, оставляем L='Hebrew' только если реально нужно
-    // (Обычно chatLang будет не 'he' в ваших сценариях)
 
     const languageLockMsg = {
       role: 'system',
@@ -263,7 +249,7 @@ app.post('/ask', async (req, res) => {
       },
     ];
 
-    // ---- Первичная генерация
+    // ---- первичная генерация
     let response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
@@ -282,14 +268,23 @@ app.post('/ask', async (req, res) => {
 
     let reply = response.data?.choices?.[0]?.message?.content?.trim() || '';
 
-    // ---- Пост-валидация языка. Если «уплыл», один раз перезапрашиваем перепись на нужном языке
-    const badScriptMix = containsForeignScripts(reply, L);
-    const weakLangSignal = !looksLikeLanguage(reply, L);
-    if (badScriptMix || weakLangSignal) {
-      console.log('🛠️ Переписываем ответ строго в целевом языке:', L, { badScriptMix, weakLangSignal });
+    // ---- пост-валидация: запрещённые скрипты/маркеры для целевого языка
+    let needRewrite = containsForbiddenForTarget(reply, L) || !looksLikeLanguage(reply, L);
+
+    if (needRewrite) {
+      console.log('🛠️ Переписываем ответ строго на целевом языке:', L);
       const rewriteMessages = [
-        { role: 'system', content: `You are a careful editor. Rewrite the assistant draft STRICTLY in ${L}. Keep Hebrew words ONLY for the word itself, its forms, and examples (bold for Hebrew, italics for transliteration). Do NOT use any other language in explanations.` },
-        { role: 'user', content: `Rewrite the following text entirely in ${L}. Do not add new content. Keep structure and formatting (Markdown). Text:\n\n${reply}` },
+        {
+          role: 'system',
+          content:
+            `You are a careful editor. Rewrite the assistant draft STRICTLY in ${L}. ` +
+            `Allowed exceptions: Hebrew words for the target verb and its forms (bold) and transliteration (italics). ` +
+            (L === 'English'
+              ? `Do NOT use any Portuguese/Spanish/French words, diacritics, or articles (e.g., o/a/os/as, de, que, é; el/la/los/las; le/la/les/des). `
+              : `Do NOT use any words from other languages than ${L} in explanations. `) +
+            `Keep the original structure and Markdown formatting.`
+        },
+        { role: 'user', content: `Rewrite entirely in ${L}:\n\n${reply}` },
       ];
 
       const rewriteResp = await axios.post(
@@ -308,6 +303,38 @@ app.post('/ask', async (req, res) => {
         }
       );
       reply = rewriteResp.data?.choices?.[0]?.message?.content?.trim() || reply;
+
+      // повторная проверка
+      needRewrite = containsForbiddenForTarget(reply, L) || !looksLikeLanguage(reply, L);
+      if (needRewrite) {
+        console.log('🔁 Доп. шаг: дословный перевод-перезапись в целевой язык:', L);
+        const translateMessages = [
+          {
+            role: 'system',
+            content:
+              `You are a translator. Translate the following text into ${L}, preserving Markdown structure. ` +
+              `Do not add or remove content. Use ${L} for all explanations. Keep Hebrew words (bold) and transliteration (italics) as in the source when present.`
+          },
+          { role: 'user', content: reply },
+        ];
+
+        const translateResp = await axios.post(
+          'https://api.openai.com/v1/chat/completions',
+          {
+            model,
+            messages: translateMessages,
+            reasoning_effort: 'minimal',
+            verbosity: 'low',
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${OPENAI_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        reply = translateResp.data?.choices?.[0]?.message?.content?.trim() || reply;
+      }
     }
 
     if (!reply) {
