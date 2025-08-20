@@ -11,7 +11,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const cache = new Map();
 const model = 'gpt-5-nano';
 
-// === System prompt (жёсткие правила языка, одно слово на иврите, off-topic фильтр) ===
+// ===== System prompt (язык, одно слово на иврите, off-topic-фильтр) =====
 const SYSTEM_PROMPT = `
 Developer: # Role and Objective
 Hebrew Tutor Assistant — Help users learn the Hebrew language and grammar, especially verbs, in a friendly, clear, and beginner-focused style. Support answers in the user's language (English, Russian, French, Spanish, Portuguese, Arabic, or Amharic).
@@ -74,8 +74,7 @@ Use only the functionality described herein; do not invoke any external tools or
     – музыка / music → **לנגן** (_lenagen_) — “играть (на инструменте)”
     Present 1 best-guess verb (optionally 1 alternative) in the same one-line format and ask which verb to conjugate.
 
-- On user confirmation (Yes/Да/Oui/Sí/Sim/نعم/አዎ), provide full conjugation immediately using the required format. If they decline, stop politely.
-
+- On user confirmation (Yes/Да/Oui/Sí/Sim/نعم/አዎ), provide full conjugation immediately following the format rules. If they decline, stop politely.
 
 # Idiom/Expression Handling
 1. Recognize idioms, proverbs, and slang in all supported languages.
@@ -113,28 +112,36 @@ Always use Markdown for formatting. Structure output as described above. Ensure 
 - Ask for clarification only when language or intent is truly unclear.
 `;
 
-// --- Грубый детектор языка для якоря ---
+// ===== Языковые утилиты =====
+const LANG_MAP = {
+  en: 'English',
+  ru: 'Russian',
+  fr: 'French',
+  es: 'Spanish',
+  pt: 'Portuguese',
+  ar: 'Arabic',
+  am: 'Amharic',
+  he: 'Hebrew',
+};
+
 function detectLangLabel(str = '') {
   if (/[А-Яа-яЁё]/.test(str)) return 'Russian';
   if (/[\u0590-\u05FF]/.test(str)) return 'Hebrew';
   if (/[À-ÿ]/i.test(str) && /(?:\b(le|la|les|des|un|une|du|de la)\b)/i.test(str)) return 'French';
-  if (/[ÁÉÍÓÚÑáéíóúñ]/.test(str)) return 'Spanish';
+  if (/[ÁÉÍÓÚÑáéíóúñ¿¡]/.test(str)) return 'Spanish';
   if (/\b(o|a|os|as|um|uma|de|que)\b/i.test(str)) return 'Portuguese';
   if (/[اأإآء-ي]/.test(str)) return 'Arabic';
   if (/[ዐ-፟]/.test(str)) return 'Amharic';
   return 'English';
 }
 
-// --- Одно слово на иврите? ---
 function isSingleHebrewToken(str = '') {
   const s = String(str).trim();
-  if (!s || /\s/.test(s)) return false; // есть пробелы — уже не одно слово
-  return /^[\u0590-\u05FF\u0591-\u05C7]+$/.test(s); // только еврейские буквы/никуд
+  if (!s || /\s/.test(s)) return false;
+  return /^[\u0590-\u05FF\u0591-\u05C7]+$/.test(s);
 }
 
-// --- Определяем язык чата по истории, если последнее сообщение — одно слово на иврите ---
-function detectChatLanguageFromHistory(history = [], fallback = 'Russian') {
-  // 1) сначала по последним сообщениям пользователя
+function detectChatLanguageFromHistory(history = [], fallback = 'English') {
   for (let i = history.length - 1; i >= 0; i--) {
     const m = history[i];
     if (!m || m.role !== 'user' || !m.content) continue;
@@ -142,7 +149,6 @@ function detectChatLanguageFromHistory(history = [], fallback = 'Russian') {
     const lang = detectLangLabel(text);
     if (lang && lang !== 'Hebrew') return lang;
   }
-  // 2) если не нашли — смотрим любые сообщения
   for (let i = history.length - 1; i >= 0; i--) {
     const m = history[i];
     if (!m || !m.content) continue;
@@ -150,19 +156,45 @@ function detectChatLanguageFromHistory(history = [], fallback = 'Russian') {
     const lang = detectLangLabel(text);
     if (lang && lang !== 'Hebrew') return lang;
   }
-  return fallback; // дефолт: Russian (можно сменить на English при желании)
+  return fallback;
 }
 
-// 🧹 Очистка кэша раз в 10 минут
+// ——— Пост-валидация и форс-переписывание, если «уплыл» язык ———
+function looksLikeLanguage(text = '', target = 'English') {
+  if (target === 'Russian') return /[А-Яа-яЁё]/.test(text);
+  if (target === 'Arabic') return /[اأإآء-ي]/.test(text);
+  if (target === 'Amharic') return /[ዐ-፟]/.test(text);
+  if (target === 'Hebrew') return /[\u0590-\u05FF]/.test(text);
+  if (target === 'French') return /\b(le|la|les|des|un|une|du|de|et|que|est)\b/i.test(text);
+  if (target === 'Spanish') return /\b(el|la|los|las|de|que|y|en|un|una|es|con|para)\b/i.test(text);
+  if (target === 'Portuguese') return /\b(o|a|os|as|de|que|e|em|um|uma|é|com|para)\b/i.test(text);
+  if (target === 'English') return /\b(the|and|to|is|you|of|in|for|on|with|as)\b/i.test(text);
+  return true;
+}
+
+function containsForeignScripts(text = '', target = 'English') {
+  const hasHeb = /[\u0590-\u05FF]/.test(text);
+  const hasAra = /[اأإآء-ي]/.test(text);
+  const hasCyr = /[А-Яа-яЁё]/.test(text);
+  const hasAmh = /[ዐ-፟]/.test(text);
+  if (target !== 'Hebrew' && hasHeb) return true;
+  if (target !== 'Arabic' && hasAra) return true;
+  if (target !== 'Russian' && hasCyr) return true;
+  if (target !== 'Amharic' && hasAmh) return true;
+  return false;
+}
+
+// 🧹 Очистка кэша каждые 10 минут
 setInterval(() => {
   cache.clear();
   console.log('🧹 Кэш очищен автоматически (TTL)');
 }, 10 * 60 * 1000);
 
+// ===== Маршрут =====
 app.post('/ask', async (req, res) => {
   console.log('📥 Получен запрос от клиента:', req.body);
 
-  const { question, history = [], verbContext = '' } = req.body || {};
+  const { question, history = [], verbContext = '', chatLang } = req.body || {};
   if (!question) {
     console.warn('⚠️ Вопрос не передан!');
     return res.status(400).json({ reply: 'Вопрос не передан' });
@@ -180,7 +212,6 @@ app.post('/ask', async (req, res) => {
     : normalized;
 
   const skipCache = isConfirmation;
-
   if (!skipCache && cache.has(cacheKey)) {
     console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
     return res.json({ reply: cache.get(cacheKey) });
@@ -190,31 +221,35 @@ app.post('/ask', async (req, res) => {
     console.log('🔗 Отправка запроса в OpenAI...');
     console.log('📦 Используем модель:', model);
 
-    // берём только последние 10 сообщений истории
     const trimmedHistory = Array.isArray(history) ? history.slice(-10) : [];
     let updatedHistory = [...trimmedHistory];
 
-    // если это подтверждение — добавляем исходный контекст глагола
     if (isConfirmation && verbContext) {
       console.log('📌 Подтверждение — добавляем verbContext:', verbContext);
       updatedHistory.push({ role: 'user', content: String(verbContext) });
     }
 
-    // язык ответа: если одно слово на иврите — брать язык чата из истории
+    // 1) Язык из клиента (если прислали chatLang)
+    let L = LANG_MAP?.[String(chatLang || '').toLowerCase()] || null;
+
+    // 2) Если не прислали — авто-детект с правилом «одно слово на иврите → язык чата»
     const sourceForLang = (isConfirmation && verbContext) ? String(verbContext) : String(question);
     const singleHebrew = isSingleHebrewToken(sourceForLang);
-    const L = singleHebrew
-      ? detectChatLanguageFromHistory(updatedHistory, 'Russian')
-      : detectLangLabel(sourceForLang);
+    if (!L) {
+      L = singleHebrew
+        ? detectChatLanguageFromHistory(updatedHistory, 'English')
+        : detectLangLabel(sourceForLang);
+    }
+    // Если прислали 'he', но сообщение не на иврите — не насилуем, оставляем L='Hebrew' только если реально нужно
+    // (Обычно chatLang будет не 'he' в ваших сценариях)
 
     const languageLockMsg = {
       role: 'system',
       content: singleHebrew
         ? `TARGET LANGUAGE = ${L}. The last user message is a SINGLE Hebrew token. Still respond 100% in ${L}. Use Hebrew ONLY for the word itself, its forms, and examples. Do NOT use Hebrew in explanations unless TARGET LANGUAGE is Hebrew.`
-        : `TARGET LANGUAGE = ${L}. Output MUST be 100% in ${L}. Translations and metadata labels MUST be in ${L}. Do NOT use any other language in explanations.`,
+        : `TARGET LANGUAGE = ${L}. Output MUST be 100% in ${L}. Translations and metadata labels MUST be in ${L}. Do NOT use any other language in explanations. If any sentence is not in ${L}, rewrite it into ${L} before sending.`,
     };
 
-    // сборка сообщений (system + якорь + история + вопрос)
     const cleanMessages = [
       { role: 'system', content: SYSTEM_PROMPT },
       languageLockMsg,
@@ -228,13 +263,13 @@ app.post('/ask', async (req, res) => {
       },
     ];
 
-    // единственный запрос к gpt-5-nano
-    const response = await axios.post(
+    // ---- Первичная генерация
+    let response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
         model,
         messages: cleanMessages,
-        reasoning_effort: 'low', // можно 'minimal' для ещё большей скорости
+        reasoning_effort: 'low',
         verbosity: 'medium',
       },
       {
@@ -245,14 +280,43 @@ app.post('/ask', async (req, res) => {
       }
     );
 
-    const reply = response.data?.choices?.[0]?.message?.content?.trim();
+    let reply = response.data?.choices?.[0]?.message?.content?.trim() || '';
+
+    // ---- Пост-валидация языка. Если «уплыл», один раз перезапрашиваем перепись на нужном языке
+    const badScriptMix = containsForeignScripts(reply, L);
+    const weakLangSignal = !looksLikeLanguage(reply, L);
+    if (badScriptMix || weakLangSignal) {
+      console.log('🛠️ Переписываем ответ строго в целевом языке:', L, { badScriptMix, weakLangSignal });
+      const rewriteMessages = [
+        { role: 'system', content: `You are a careful editor. Rewrite the assistant draft STRICTLY in ${L}. Keep Hebrew words ONLY for the word itself, its forms, and examples (bold for Hebrew, italics for transliteration). Do NOT use any other language in explanations.` },
+        { role: 'user', content: `Rewrite the following text entirely in ${L}. Do not add new content. Keep structure and formatting (Markdown). Text:\n\n${reply}` },
+      ];
+
+      const rewriteResp = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          model,
+          messages: rewriteMessages,
+          reasoning_effort: 'minimal',
+          verbosity: 'low',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      reply = rewriteResp.data?.choices?.[0]?.message?.content?.trim() || reply;
+    }
+
     if (!reply) {
       console.warn('⚠️ OpenAI вернул пустой ответ!');
       return res.status(500).json({ reply: 'Пустой ответ от ChatGPT' });
     }
 
     cache.set(cacheKey, reply);
-    console.log('✅ Ответ получен от OpenAI');
+    console.log('✅ Ответ получен от OpenAI (lang =', L, ')');
     return res.status(200).json({ reply });
 
   } catch (error) {
