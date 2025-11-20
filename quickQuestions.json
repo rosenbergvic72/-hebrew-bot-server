@@ -1,385 +1,466 @@
 {
   "русский": [
-   [
-  {
-    "label": "Биньяны",
-    "question": "Дай понятное объяснение, что такое биньяны в иврите (модель спряжения). Подробно разберись с PAAL, PIEL, NIFAL, HIFIL и HITPAEL: 1) базовая функция и типовое значение каждого биньяна; 2) как распознать по форме (шаблоны, префиксы/инфикс/суффиксы, типичные огласовки — описательно, без никуда); 3) когда используется (актив/пассив/каузатив/возвратность и т. п.). Для каждого биньяна приведи ровно 7 разных глаголов с тройками (**иврит**, _транслит_, перевод) и укажи корень и биньян. В конце — краткое сравнение биньянов и частые ошибки выбора."
-  },
-  {
-    "label": "Корни",
-    "question": "Объясни, что такое корень глагола (שורש), как он влияет на значение и как его определить (типичные паттерны, слабые буквы, интерактивные подсказки). Дай не менее 10 наборов однокоренных слов/глаголов из разных биньянов: для каждого набора укажи корень, затем 2–4 формы из разных биньянов (каждая — с тройкой: **иврит**, _транслит_, перевод), и кратко прокомментируй семантические сдвиги между биньянами."
-  },
-  {
-    "label": "Спряжение глаголов",
-    "question": "Системно перечисли правила спряжения глаголов в иврите во всех временах: прошедшее, настоящее (причастные формы), будущее, повелительное (кратко, основная логика). Разбей ответ на разделы: 1) общие принципы (лица, род, число); 2) шаблоны по биньянам (PAAL, PIEL, NIFAL, HIFIL, HITPAEL) — не гигантские таблицы, а компактные схемы; 3) по одной мини-парадигме на биньян (я/ты м/ты ж/он/она/мы/вы/они в прош., наст., буд.) на одном глаголе с указанием корня и тройками для каждой формы. Отдельно отметь особенности слабых корней (гортанные, начальная נ, средняя י/ו и т. п.)."
-  },
-  {
-    "label": "Инфинитивы",
-    "question": "Объясни, что такое инфинитив (שם פועל), как он образуется в каждом биньяне (формальные признаки, предлог ל- и варианты без него), и когда используется (цель, обязанность, модальность и т. д.). Приведи по 5 инфинитивов для каждого биньяна (PAAL, PIEL, NIFAL, HIFIL, HITPAEL). Для каждого примера дай тройку (**иврит**, _транслит_, перевод) и короткое примерное предложение."
-  },
-  {
-    "label": "Предлоги",
-    "question": "Перечисли ключевые предлоги иврита, включая слитные: ל-, ב-, מ-, על, אל, את, עם, אצל, בשביל, בגלל, אחרי, לפני, בין, תוך и др. Кратко объясни значения и типичное управление с глаголами (в т. ч. инфинитив). Для каждого предлога приведи ровно 5 примеров связки «глагол + предлог + дополнение», каждый пример — с тройкой (**иврит**, _транслит_, перевод). В конце добавь список распространённых коллокаций глагол+предлог и типичные ошибки (например, путаница между ל- и על)."
-  },
-  {
-    "label": "Императивы",
-    "question": "Объясни образование повелительных форм (ציווי) в основных биньянах: кто реально используется (2-е л., ед./мн., м./ж.), как образуются формы (отсутствие личного префикса, основы будущего и т. д.), отрицание (אל + будущее), вежливые/мягкие альтернативы. Приведи по 2–3 примера на биньян: ед. м., ед. ж., мн. м./ж., с тройками (**иврит**, _транслит_, перевод). Обязательно укажи разговорные/неформальные варианты, которые часто слышны в речи, и предупреди о неупотребимых лицах."
-  },
-  {
-    "label": "Огласовки",
-    "question": "Подробно объясни, что такое огласовки (никудот, נקודות), их типы и расположение относительно букв. Дай полный список основных огласовок с названием, произношением и транслитерацией на русском. Для каждой огласовки приведи по 1–2 примера слов с никудом и добавь форму без никуда в скобках. Объясни, как огласовки влияют на произношение и грамматику (различение форм, биньянов, смыслов). Раздели на таблицу/список для удобства."
-  },
-  {
-    "label": "Местоимения",
-    "question": "Перечисли все группы местоимений: личные (полные и суффиксальные), притяжательные (суффиксы), указательные, возвратные и формы в составе предлогов (ל-, ב-, מ- с местоимёнными суффиксами). Для каждой группы дай компактную таблицу/список и по 1 короткому примерному предложению на элемент (с тройкой: **иврит**, _транслит_, перевод). Отметь различия письменной/разговорной нормы, где актуально."
-  },
-  {
-    "label": "Модальные глаголы",
-    "question": "Дай обзор модальных слов/глаголов и предикативов: יכול, צריך, חייב, מותר, אסור, כדאי, אפשר, רצוי, עלול, עשוי и др. Объясни, с какими формами они сочетаются (обычно с инфинитивом; предлоги ל-/без предлога), и различия значений (способность, обязанность, разрешение/запрет, совет, вероятность/риск и т. п.). Для каждого элемента приведи 2 примера с тройками (**иврит**, _транслит_, перевод) и подчеркни тонкие различия между близкими по смыслу."
-  },
-  {
-    "label": "Модальные слова",
-    "question": "Составь список вводных слов, частиц, наречий и предикативов для выражения уверенности/сомнения/оценки/усиления в разговорной речи. Включи нужные из списка пользователя (например: בידאי, ללא ספק, אמנם, מובן מאליו, נכון, בהחלט, בטח; אפשר, כנראה, סביר, אולי, יתכן; למזל, לצערי, דרך אגב, למעשה, בפירוש; разговорные усилители: כן, כן כן, אהה, בדיוק בדיוק и др.) и при необходимости добавь уместные разговорные варианты (например, בטח «точно», באמת? «правда?»). Для КАЖДОГО слова приведи по 1 короткому предложению с тройкой (**иврит**, _транслит_, перевод). Сгруппируй по категориям."
-  },
-  {
-    "label": "Речь",
-    "question": "Дай список глаголов речи: לדבר, לומר, לספר, להגיד, לשוחח, לצעוק, ללחוש, לבקש, להודיע, להסביר, להדגיש, להזכיר, להזהיר и др. Для каждого глагола укажи перевод, тройку (**иврит**, _транслит_, перевод), типичные предлоги/управление (ל-, על, עם, перед кем/о чём), и одно примерное предложение. В конце — краткая таблица различий между близкими глаголами (напр. לומר/להגיד; לדבר/לשוחח; להסביר/להודיע)."
-  },
-  {
-    "label": "Зрение",
-    "question": "Дай список глаголов, связанных со зрением: לראות, להביט, לצפות, להסתכל, להבחין, להתבונן, לסרוק, לבדוק и др. Для каждого: перевод, тройка (**иврит**, _транслит**, перевод), управление/предлоги (ב-, על, אל и т. п.), по 1 примерному предложению. Заверши сравнением близких глаголов (לראות vs להסתכל/להביט; לצפות «смотреть/ожидать» и т. п.) с практическими подсказками."
-  },
-  {
-    "label": "Слух",
-    "question": "Дай список глаголов, связанных со слухом: לשמוע, להקשיב, להאזין, לשמוע על, לשמוע מ-, להקשיב ל-, ועוד. Для каждого: перевод, тройка (**иврит**, _транслит_, перевод), управление/предлоги и 1 примерное предложение. Объясни различия (לשמוע «слышать (факт)» vs להקשיב «слушать (внимательно)» vs להאזין «слушать (обычно аудио/радио)»)."
-  }
-]
-
+    {
+      "label": "Биньяны",
+      "question": "Кратко объясни, что такое биньяны в иврите (PAAL, PIEL, NIFAL, HIFIL, HITPAEL), их основные значения и самые типичные модели огласовок. Приведи по 5–7 примеров глаголов для каждого биньяна. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Корни",
+      "question": "Кратко объясни, что такое корень (שורש) в иврите и как он помогает понять значение слова и находить однокоренные слова. Покажи на 8–10 примерах, как выделять корень в глаголах и как меняется значение в разных биньянах. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Спряжение глаголов",
+      "question": "Сделай короткий обзор спряжения глаголов в иврите в настоящем, прошедшем и будущем времени для всех лиц, родов и чисел. Приведи по одному наглядному примеру спряжения из нескольких разных биньянов. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Инфинитивы",
+      "question": "Кратко объясни, что такое инфинитив (שם הפועל) в иврите и как он обычно образуется в основных биньянах. Покажи типичные конструкции с инфинитивом (после модальных глаголов, предлогов и т.д.) и приведи 6–8 примеров. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Предлоги",
+      "question": "Перечисли самые важные предлоги в иврите (включая ב־, ל־, מ־, כ־ и др.) и коротко объясни их основные значения. Для каждого предлога приведи по 2–3 примера сочетаний «глагол + предлог» в простых предложениях. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Императивы",
+      "question": "Кратко объясни, как образуется повелительное наклонение в иврите в основных биньянах для мужского/женского рода и единственного/множественного числа. Приведи 8–10 частотных примеров императива из живой речи. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Огласовки",
+      "question": "Кратко объясни, что такое огласовки (никуд) в иврите и зачем они нужны. Перечисли основные огласовки с их примерным звучанием и дай по 1–2 простых примера слова для каждой. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Местоимения",
+      "question": "Сделай краткий список основных местоимений в иврите: личные, притяжательные и указательные. Покажи, как они меняются по роду и числу, и приведи по 1–2 примера предложений для каждой группы. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Модальные глаголы",
+      "question": "Кратко перечисли главные модальные глаголы и выражения в иврите (уметь, мочь, хотеть, нужно, можно и т.п.) и покажи, как они соединяются с инфинитивом или будущим временем. Для каждого приведи по 1–2 примера и коротко поясни оттенки значений. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Модальные слова",
+      "question": "Сделай краткую подборку модальных слов и вводных выражений в иврите (уверенность, сомнение, оценка, отношение), используя, среди прочих, слова вида בידאי, ללא ספק, כנראה, אולי, ברור, כמובן и др. Для каждого приведи по одному простому примеру предложения. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Речь",
+      "question": "Составь краткий список основных глаголов речи в иврите (לדבר, לומר, לספר, להגיד, לשאול и т.д.). Для каждого укажи перевод и транслитерацию, приведи 1–2 примера предложений и коротко поясни различия между близкими глаголами. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Зрение",
+      "question": "Составь короткий список глаголов, связанных со зрением (לראות, להסתכל, להביט, לצפות, להבחין и т.д.), с переводом и транслитерацией. Для каждого приведи по 1–2 примера и кратко объясни разницу между «видеть», «смотреть», «наблюдать» и т.п. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Слух",
+      "question": "Составь короткий список глаголов, связанных со слухом (לשמוע, להקשיב, להאזין и т.д.), с переводом и транслитерацией. Для каждого приведи по 1–2 примера и кратко поясни разницу по уровню внимания и формальности. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    },
+    {
+      "label": "Смихуты",
+      "question": "Кратко объясни, что такое смихут (состояние сопряжения) и в чём его суть. Приведи 6–8 частотных примеров конструкций типа «существительное в смихуте + определяющее существительное» с понятными переводами. Во всех примерах обязательно указывай форму на иврите, транслитерацию и перевод на русский."
+    }
   ],
   "english": [
     {
       "label": "Binyanim",
-      "question": "Explain what binyanim are in Hebrew. Give a detailed overview of the binyanim PAAL, PIEL, NIFAL, HIFIL, and HITPAEL: how to distinguish them, their main features, and when they are used. Provide 7 example verbs for each binyan. Give me answer in English"
+      "question": "Briefly explain what binyanim are in Hebrew (PAAL, PIEL, NIFAL, HIFIL, HITPAEL), their core meanings and very typical vocalization patterns. Give 5–7 example verbs for each binyan. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Roots",
-      "question": "What is a verb root in Hebrew, how does it influence the meaning of the verb, and how can it be identified? Provide examples of related words and verbs from different binyanim."
+      "question": "Briefly explain what a Hebrew verb root (shoresh, שורש) is and how it helps to understand word meaning and word families. Show on 8–10 examples how to identify the root in verbs and how the meaning changes across binyanim. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Verb Conjugation",
-      "question": "List and explain in detail the main rules of Hebrew verb conjugation in the present, past, and future tenses. Specify the features of conjugation for all persons, gender (masculine and feminine), and number (singular and plural). Provide conjugation examples for verbs from all major binyanim."
+      "question": "Give a short overview of Hebrew verb conjugation in the present, past, and future for all persons, genders, and numbers. Provide one clear mini-table or example set for a few verbs from different binyanim. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Infinitives",
-      "question": "What is an infinitive in Hebrew, how is it formed, and when is it used? Provide several examples of infinitives from each binyan."
+      "question": "Briefly explain what the infinitive (shem ha-po'al, שם הפועל) is in Hebrew and how it is usually formed in the main binyanim. Show the most common constructions with the infinitive and provide 6–8 simple examples. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Prepositions",
-      "question": "List the main prepositions in Hebrew, including inseparable prepositions, and explain their usage with verbs using examples."
+      "question": "List the most important Hebrew prepositions (including ב־, ל־, מ־, כ־, etc.) and give their core meanings. For each preposition, show 2–3 typical “verb + preposition” combinations in simple sentences. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Imperatives",
-      "question": "How are imperative verb forms formed in Hebrew for all persons and numbers? Explain the rules of building imperatives in binyanim, provide examples in singular and plural, masculine and feminine. Be sure to include common informal forms used in everyday speech."
+      "question": "Briefly explain how imperative forms are built in the main Hebrew binyanim for masculine/feminine and singular/plural. Give 8–10 common imperative examples from everyday spoken Hebrew. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Nikudot",
-      "question": "Explain in detail what nikudot (vowel points, נקודות) are in Hebrew. What types exist, how are they classified, and where are they placed relative to letters? How do they affect pronunciation, grammar, and word interpretation? Provide a list of the main nikudot with their names, pronunciation, transliteration, and example words with translations."
+      "question": "Briefly explain what nikudot (vowel points) are in Hebrew and why they matter. List the main nikudot with approximate pronunciation and give 1–2 simple word examples for each. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Pronouns",
-      "question": "List all personal, possessive, demonstrative, and reflexive pronouns in Hebrew. Provide examples of their use in sentences."
+      "question": "Give a short list of the main Hebrew pronouns: personal, possessive, and demonstrative. Show how they change for gender and number and provide 1–2 example sentences for each group. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Modal Verbs",
-      "question": "Which modal verbs are used in Hebrew, how are they combined with other verbs, and which forms are used? Provide examples."
+      "question": "Briefly list the key modal verbs and expressions in Hebrew (can, want, must, need, may, etc.) and show how they combine with infinitives or future forms. Give 1–2 examples for each and briefly explain meaning differences. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Modal Words",
-      "question": "Give a list of introductory words, particles, adverbs, and predicatives in Hebrew similar to: \"of course\", \"exactly\", \"right\", \"really\", \"possibly\", \"probably\", \"likely\", etc. Divide them into groups (words of certainty/confirmation, words of assumption/uncertainty, words of evaluation/attitude, conversational intensifiers, adverbs of certainty/doubt). Use such Hebrew examples (without vowels):\n\nWords of certainty / confirmation:\nבידאי, ללא ספק, לא פחות, בלי ספק, אמנם, בטבע הדברים, מובן מאליו, מאליו, נכון, באמת, בדיוק, נכון, בהחלט, בטח\n\nWords of assumption / uncertainty:\nאפשר, כנראה, סביר, נראה, אולי, יתכן, ברור, כמובן, כנראה, צריך להיות\n\nWords of evaluation / attitude:\nלמזל, לצערנו, להפליא, לצערי, דרך אגב, בכלל, למעשה, העיקר, בקצרה, למעשה, בפירוש\n\nConversational intensifiers:\nכן, כן כן, אהה, בדיוק בדיוק, עוד מה, איך לא, זה כלום\n\nIf needed, add colloquial variants: בטח (sure), באמת? (really?).\n\nGive a short example sentence in Hebrew with a Russian translation for each word."
+      "question": "Prepare a short list of modal and introductory words in Hebrew that express certainty, doubt, and attitude (for example בידאי, ללא ספק, כנראה, אולי, ברור, כמובן, etc.). For each word, give one simple example sentence. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Speech",
-      "question": "List Hebrew verbs related to speech (e.g., לדבר, לומר, לספר, להגיד, לשוחח), with English translation, transliteration, example sentences, and the prepositions used with them. Explain differences between similar verbs."
+      "question": "Make a short list of key Hebrew verbs of speech (לדבר, לומר, לספר, להגיד, לשאול, etc.). For each verb, give an English translation, transliteration, 1–2 example sentences, and a brief note on how it differs from similar verbs. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Vision",
-      "question": "List Hebrew verbs related to vision (e.g., לראות, להביט, לצפות, להסתכל, להבחין), with English translation, transliteration, example sentences, and the prepositions used with them. Explain differences between similar verbs."
+      "question": "Make a short list of Hebrew verbs of vision (לראות, להסתכל, להביט, לצפות, להבחין, etc.) with translation and transliteration. Give 1–2 examples for each and briefly explain the differences between “see”, “look”, “watch”, etc. In all examples, always include the Hebrew form, transliteration, and translation into English."
     },
     {
       "label": "Hearing",
-      "question": "List Hebrew verbs related to hearing (e.g., לשמוע, להקשיב, להאזין), with English translation, transliteration, example sentences, and the prepositions used with them. Explain differences between similar verbs."
+      "question": "Make a short list of Hebrew verbs of hearing (לשמוע, להקשיב, להאזין, etc.) with translation and transliteration. Give 1–2 examples for each and briefly explain differences in attention level and register. In all examples, always include the Hebrew form, transliteration, and translation into English."
+    },
+    {
+      "label": "Smikhut (Construct State)",
+      "question": "Briefly explain what smikhut (construct state) is and why it is used in Hebrew. Give 6–8 common examples of “noun in construct + defining noun” with clear translations. In all examples, always include the Hebrew form, transliteration, and translation into English."
     }
   ],
   "français": [
     {
-      "label": "Binyanims",
-      "question": "Explique ce que sont les binyanim en hébreu. Décris en détail les binyanim PAAL, PIEL, NIFAL, HIFIL et HITPAEL : comment les distinguer, leurs principales caractéristiques et dans quels cas ils sont utilisés. Donne 7 exemples de verbes pour chaque binyan."
+      "label": "Binyanim",
+      "question": "Explique brièvement ce que sont les binyanim en hébreu (PAAL, PIEL, NIFAL, HIFIL, HITPAEL), leurs sens de base et leurs modèles de vocalisation les plus typiques. Donne 5 à 7 exemples de verbes pour chaque binyan. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Racines",
-      "question": "Qu’est-ce qu’une racine verbale en hébreu, comment influence-t-elle le sens du verbe et comment peut-on l’identifier ? Donne des exemples de mots et de verbes apparentés issus de différents binyanim."
+      "question": "Explique en quelques phrases ce qu’est une racine verbale (shoresh, שורש) en hébreu et comment elle aide à comprendre le sens d’un mot et d’une famille de mots. Montre sur 8 à 10 exemples comment identifier la racine dans les verbes et comment le sens varie selon le binyan. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Conjugaison des verbes",
-      "question": "Énumère et explique en détail les règles principales de conjugaison des verbes en hébreu aux temps présent, passé et futur. Indique les particularités de la conjugaison pour toutes les personnes, les genres (masculin et féminin) et les nombres (singulier et pluriel). Donne des exemples de conjugaison pour les verbes de tous les binyanim principaux."
+      "question": "Présente un aperçu rapide de la conjugaison des verbes hébreux aux temps présent, passé et futur pour toutes les personnes, genres et nombres. Donne un petit tableau ou un ensemble d’exemples pour quelques verbes de binyanim différents. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Infinitifs",
-      "question": "Qu’est-ce qu’un infinitif en hébreu, comment est-il formé et quand est-il utilisé ? Donne plusieurs exemples d’infinitifs pour chaque binyan."
+      "question": "Explique brièvement ce qu’est l’infinitif (shem ha-po'al, שם הפועל) en hébreu et comment il se forme dans les principaux binyanim. Montre les constructions les plus courantes avec l’infinitif et donne 6 à 8 exemples simples. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Prépositions",
-      "question": "Liste les principales prépositions en hébreu, y compris les prépositions inséparables, et explique leur utilisation avec les verbes à l’aide d’exemples."
+      "question": "Dresse la liste des prépositions hébraïques les plus importantes (y compris ב־, ל־, מ־, כ־, etc.) avec leurs sens principaux. Pour chacune, montre 2 ou 3 combinaisons typiques « verbe + préposition » dans des phrases simples. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Impératifs",
-      "question": "Comment se forment les formes impératives des verbes en hébreu pour toutes les personnes et tous les nombres ? Explique les règles de formation dans les binyanim, donne des exemples au singulier et au pluriel, au masculin et au féminin. Mentionne aussi les formes informelles couramment utilisées à l’oral."
+      "question": "Explique brièvement comment se forment les formes impératives dans les principaux binyanim pour le masculin/féminin et le singulier/pluriel. Donne 8 à 10 exemples fréquents d’impératifs utilisés à l’oral. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Nikudot",
-      "question": "Explique en détail ce que sont les nikudot (signes voyelles, נקודות) en hébreu. Quels types existent, comment sont-ils classés et où sont-ils placés par rapport aux lettres ? Comment influencent-ils la prononciation, la grammaire et le sens des mots ? Fournis une liste des principaux nikudot avec leurs noms, leur prononciation, leur translittération et des exemples de mots avec traduction."
+      "question": "Explique brièvement ce que sont les nikudot (signes voyelles) en hébreu et pourquoi ils sont importants. Présente les principaux nikudot avec leur prononciation approximative et donne 1 ou 2 exemples de mots pour chacun. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Pronoms",
-      "question": "Énumère tous les pronoms personnels, possessifs, démonstratifs et réfléchis en hébreu. Donne des exemples d’utilisation dans des phrases."
+      "question": "Donne une courte liste des pronoms principaux en hébreu : personnels, possessifs et démonstratifs. Montre comment ils varient selon le genre et le nombre, et fournis 1 ou 2 phrases d’exemple pour chaque groupe. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Verbes modaux",
-      "question": "Quels verbes modaux sont utilisés en hébreu, comment sont-ils combinés avec d’autres verbes et quelles formes sont utilisées ? Donne des exemples."
+      "question": "Énumère brièvement les principaux verbes et expressions modaux en hébreu (pouvoir, vouloir, devoir, falloir, etc.) et montre comment ils se combinent avec l’infinitif ou le futur. Donne 1 ou 2 exemples pour chacun et explique en quelques mots les nuances de sens. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Mots modaux",
-      "question": "Donne une liste de mots introductifs, particules, adverbes et prédicatifs en hébreu similaires à : \"bien sûr\", \"exactement\", \"vrai\", \"réellement\", \"peut-être\", \"probablement\", \"sans doute\", etc. Classe-les par groupes (mots de certitude / confirmation, mots de supposition / incertitude, mots d'évaluation / d'attitude, particules de renforcement à l’oral, adverbes de certitude / de doute). Utilise ces exemples en hébreu (sans voyelles) :\n\nMots de certitude / confirmation :\nבידאי, ללא ספק, לא פחות, בלי ספק, אמנם, בטבע הדברים, מובן מאליו, מאליו, נכון, באמת, בדיוק, נכון, בהחלט, בטח\n\nMots de supposition / incertitude :\nאפשר, כנראה, סביר, נראה, אולי, יתכן, ברור, כמובן, כנראה, צריך להיות\n\nMots d'évaluation / d'attitude :\nלמזל, לצערנו, להפליא, לצערי, דרך אגב, בכלל, למעשה, העיקר, בקצרה, למעשה, בפירוש\n\nParticules de renforcement (langue parlée) :\nכן, כן כן, אהה, בדיוק בדיוק, עוד מה, איך לא, זה כלום\n\nAjoute, si besoin, des variantes familières : בטח (sûr), באמת? (vraiment ?).\n\nDonne pour chaque mot une phrase d’exemple en hébreu avec traduction en russe."
+      "question": "Prépare une petite liste de mots et expressions modaux en hébreu exprimant la certitude, le doute et l’attitude (par exemple בידאי, ללא ספק, כנראה, אולי, ברור, כמובן, etc.). Pour chacun, donne une phrase simple d’exemple. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Parole",
-      "question": "Donne une liste de verbes hébreux liés à la parole (par ex. לדבר, לומר, לספר, להגיד, לשוחח), avec traduction en français, translittération, exemples de phrases, et les prépositions utilisées. Explique les différences entre les verbes similaires."
+      "question": "Dresse une courte liste de verbes hébreux de parole (לדבר, לומר, לספר, להגיד, לשאול, etc.). Pour chacun, donne une traduction française, une translittération, 1 ou 2 phrases d’exemple et une brève remarque sur la différence avec les verbes proches. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Vision",
-      "question": "Donne une liste de verbes hébreux liés à la vision (par exemple : לראות, להביט, לצפות, להסתכל, להבחין), avec une traduction en français, une translittération, des exemples de phrases et les prépositions utilisées. Explique les différences entre les verbes similaires."
+      "question": "Dresse une courte liste de verbes hébreux liés à la vision (לראות, להסתכל, להביט, לצפות, להבחין, etc.) avec traduction et translittération. Donne 1 ou 2 exemples pour chacun et explique brièvement la différence entre « voir », « regarder », « observer », etc. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     },
     {
       "label": "Ouïe",
-      "question": "Donne une liste de verbes hébreux liés à l’ouïe (par exemple : לשמוע, להקשיב, להאזין), avec une traduction en français, une translittération, des exemples et les prépositions utilisées. Explique les différences entre les verbes similaires."
+      "question": "Dresse une courte liste de verbes hébreux liés à l’ouïe (לשמוע, להקשיב, להאזין, etc.) avec traduction et translittération. Donne 1 ou 2 exemples pour chacun et explique brièvement les différences de registre et d’attention. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
+    },
+    {
+      "label": "Smikhut (État construit)",
+      "question": "Explique brièvement ce qu’est la smikhut (état construit) en hébreu et à quoi elle sert. Donne 6 à 8 exemples fréquents de constructions « nom à l’état construit + nom déterminant » avec des traductions claires. Dans tous les exemples, indique toujours la forme en hébreu, la translittération et la traduction en français."
     }
   ],
-
-    
   "español": [
     {
       "label": "Binyanim",
-      "question": "Explica qué son los binyanim en hebreo. Describe en detalle los binyanim PAAL, PIEL, NIFAL, HIFIL y HITPAEL: cómo distinguirlos, sus principales características y cuándo se utilizan. Proporciona 7 ejemplos de verbos para cada binyan."
+      "question": "Explica brevemente qué son los binyanim en hebreo (PAAL, PIEL, NIFAL, HIFIL, HITPAEL), sus significados básicos y los patrones de vocalización más típicos. Da de 5 a 7 verbos de ejemplo para cada binyan. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Raíces",
-      "question": "¿Qué es una raíz verbal en hebreo, cómo influye en el significado del verbo y cómo se puede identificar? Proporciona ejemplos de palabras y verbos relacionados de diferentes binyanim."
+      "question": "Explica en pocas frases qué es una raíz verbal (shoresh, שורש) en hebreo y cómo ayuda a entender el significado de las palabras y las familias de palabras. Muestra en 8–10 ejemplos cómo identificar la raíz en los verbos y cómo cambia el significado según el binyan. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Conjugación de verbos",
-      "question": "Enumera y explica en detalle las reglas principales de conjugación de verbos en hebreo en los tiempos presente, pasado y futuro. Indica las características de la conjugación para todas las personas, géneros (masculino y femenino) y números (singular y plural). Proporciona ejemplos de conjugación de verbos de todos los binyanim principales."
+      "question": "Da una visión rápida de la conjugación de los verbos hebreos en presente, pasado y futuro para todas las personas, géneros y números. Proporciona un pequeño cuadro o conjunto de ejemplos con algunos verbos de distintos binyanim. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Infinitivos",
-      "question": "¿Qué es un infinitivo en hebreo, cómo se forma y cuándo se utiliza? Proporciona varios ejemplos de infinitivos para cada binyan."
+      "question": "Explica brevemente qué es el infinitivo (shem ha-po'al, שם הפועל) en hebreo y cómo se forma en los principales binyanim. Muestra las construcciones más frecuentes con infinitivo y da 6–8 ejemplos sencillos. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Preposiciones",
-      "question": "Enumera las principales preposiciones en hebreo, incluidas las preposiciones inseparables, y explica su uso con los verbos mediante ejemplos."
+      "question": "Enumera las preposiciones hebreas más importantes (incluidas ב־, ל־, מ־, כ־, etc.) con sus sentidos principales. Para cada una, muestra 2–3 combinaciones típicas «verbo + preposición» en frases simples. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Imperativos",
-      "question": "¿Cómo se forman las formas imperativas de los verbos en hebreo para todas las personas y números? Explica las reglas de formación en los binyanim, proporciona ejemplos en singular y plural, masculino y femenino. Asegúrate de incluir las formas informales comunes en el habla cotidiana."
+      "question": "Explica brevemente cómo se forman las formas imperativas en los principales binyanim para masculino/femenino y singular/plural. Da 8–10 ejemplos frecuentes de imperativos usados en la lengua hablada. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Nikudot",
-      "question": "Explica en detalle qué son los nikudot (puntos vocálicos, נקודות) en hebreo. ¿Qué tipos existen, cómo se clasifican y dónde se colocan respecto a las letras? ¿Cómo afectan a la pronunciación, la gramática y el significado de las palabras? Proporciona una lista de los principales nikudot con sus nombres, pronunciación, transliteración y ejemplos de palabras con traducción."
+      "question": "Explica brevemente qué son los nikudot (puntos vocálicos) en hebreo y por qué son importantes. Presenta los nikudot principales con su pronunciación aproximada y da 1–2 ejemplos de palabras para cada uno. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Pronombres",
-      "question": "Enumera todos los pronombres personales, posesivos, demostrativos y reflexivos en hebreo. Da ejemplos de su uso en oraciones."
+      "question": "Haz una lista breve de los pronombres principales en hebreo: personales, posesivos y demostrativos. Muestra cómo cambian según género y número y da 1–2 frases de ejemplo para cada grupo. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Verbos modales",
-      "question": "¿Qué verbos modales se usan en hebreo, cómo se combinan con otros verbos y qué formas se usan? Da ejemplos."
+      "question": "Enumera brevemente los verbos y expresiones modales más importantes en hebreo (poder, querer, tener que, necesitar, etc.) y muestra cómo se combinan con infinitivos o formas de futuro. Da 1–2 ejemplos para cada uno y explica en pocas palabras las diferencias de significado. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Palabras modales",
-      "question": "Da una lista de palabras introductorias, partículas, adverbios y predicativos en hebreo similares a: \"por supuesto\", \"exactamente\", \"cierto\", \"realmente\", \"quizás\", \"probablemente\", \"seguramente\", etc. Divídelos en grupos (palabras de certeza / confirmación, palabras de suposición / incertidumbre, palabras de evaluación / actitud, partículas intensificadoras en el habla coloquial, adverbios de certeza / duda). Usa estos ejemplos en hebreo (sin vocales):\n\nPalabras de certeza / confirmación:\nבידאי, ללא ספק, לא פחות, בלי ספק, אמנם, בטבע הדברים, מובן מאליו, מאליו, נכון, באמת, בדיוק, נכון, בהחלט, בטח\n\nPalabras de suposición / incertidumbre:\nאפשר, כנראה, סביר, נראה, אולי, יתכן, ברור, כמובן, כנראה, צריך להיות\n\nPalabras de evaluación / actitud:\nלמזל, לצערנו, להפליא, לצערי, דרך אגב, בכלל, למעשה, העיקר, בקצרה, למעשה, בפירוש\n\nPartículas intensificadoras (lenguaje coloquial):\nכן, כן כן, אהה, בדיוק בדיוק, עוד מה, איך לא, זה כלום\n\nSi es necesario, añade variantes coloquiales: בטח (seguro), באמת? (¿de verdad?).\n\nDa un ejemplo corto en hebreo con traducción al ruso para cada palabra."
+      "question": "Elabora una pequeña lista de palabras y expresiones modales en hebreo que expresan certeza, duda y actitud (por ejemplo בידאי, ללא ספק, כנראה, אולי, ברור, כמובן, etc.). Para cada una da una frase sencilla de ejemplo. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Habla",
-      "question": "Enumera verbos hebreos relacionados con el habla (por ejemplo: לדבר, לומר, לספר, להגיד, לשוחח), con traducción al español, transliteración, ejemplos de frases y las preposiciones que se usan con ellos. Explica las diferencias entre verbos similares."
+      "question": "Haz una lista breve de verbos hebreos relacionados con la habla (לדבר, לומר, לספר, להגיד, לשאול, etc.). Para cada verbo, da la traducción al español, la transliteración, 1–2 frases de ejemplo y un comentario corto sobre en qué se diferencia de los verbos cercanos. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Visión",
-      "question": "Da una lista de verbos hebreos relacionados con la visión (por ejemplo: לראות, להביט, לצפות, להסתכל, להבחין), con traducción al español, transliteración, ejemplos de frases y preposiciones usadas. Explica las diferencias entre verbos similares."
+      "question": "Haz una lista breve de verbos hebreos relacionados con la visión (לראות, להסתכל, להביט, לצפות, להבחין, etc.) con traducción y transliteración. Da 1–2 ejemplos para cada uno y explica de forma breve la diferencia entre «ver», «mirar», «observar», etc. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     },
     {
       "label": "Audición",
-      "question": "Da una lista de verbos hebreos relacionados con la audición (por ejemplo: לשמוע, להקשיב, להאזין), con traducción al español, transliteración, frases de ejemplo y preposiciones. Explica las diferencias entre los verbos similares."
+      "question": "Haz una lista breve de verbos hebreos relacionados con la audición (לשמוע, להקשיב, להאזין, etc.) con traducción y transliteración. Da 1–2 ejemplos para cada verbo y explica brevemente las diferencias de atención y registro. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
+    },
+    {
+      "label": "Smijut / Estado constructo",
+      "question": "Explica brevemente qué es el estado constructo (smijut, סמיכות) en hebreo y para qué se usa. Da de 6 a 8 ejemplos frecuentes de construcciones «sustantivo en estado constructo + sustantivo que lo precisa» con traducciones claras. En todos los ejemplos, indica siempre la forma en hebreo, la transliteración y la traducción al español."
     }
   ],
   "português": [
     {
       "label": "Binyanim",
-      "question": "Explique o que são os binyanim no hebraico. Fale detalhadamente sobre os binyanim PAAL, PIEL, NIFAL, HIFIL e HITPAEL: como diferenciá-los, suas principais características e quando são usados. Dê 7 exemplos de verbos para cada binyan."
+      "question": "Explique de forma breve o que são os binyanim em hebraico (PAAL, PIEL, NIFAL, HIFIL, HITPAEL), seus significados básicos e os padrões de vocalização mais típicos. Dê de 5 a 7 verbos de exemplo para cada binyan. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Raízes",
-      "question": "O que é uma raiz verbal no hebraico, como ela influencia o significado do verbo e como pode ser identificada? Forneça exemplos de palavras e verbos relacionados de diferentes binyanim."
+      "question": "Explique em poucas frases o que é uma raiz verbal (shoresh, שורש) em hebraico e como ela ajuda a entender o significado das palavras e das famílias de palavras. Mostre em 8–10 exemplos como identificar a raiz em verbos e como o sentido muda de um binyan para outro. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Conjugação de verbos",
-      "question": "Liste e explique detalhadamente as principais regras de conjugação verbal em hebraico nos tempos presente, passado e futuro. Indique as particularidades da conjugação para todas as pessoas, gêneros (masculino e feminino) e números (singular e plural). Forneça exemplos de conjugação de verbos de todos os principais binyanim."
+      "question": "Apresente uma visão rápida da conjugação de verbos hebraicos nos tempos presente, passado e futuro para todas as pessoas, gêneros e números. Forneça um pequeno quadro ou conjunto de exemplos para alguns verbos de binyanim diferentes. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Infinitivos",
-      "question": "O que é o infinitivo em hebraico, como é formado e quando é utilizado? Forneça vários exemplos de infinitivos para cada binyan."
+      "question": "Explique brevemente o que é o infinitivo (shem ha-po'al, שם הפועל) em hebraico e como ele se forma nos principais binyanim. Mostre as construções mais comuns com infinitivo e dê de 6 a 8 exemplos simples. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Preposições",
-      "question": "Liste as principais preposições do hebraico, incluindo as preposições inseparáveis, e explique seu uso com verbos, com exemplos."
+      "question": "Liste as preposições hebraicas mais importantes (incluindo ב־, ל־, מ־, כ־ etc.) com seus sentidos principais. Para cada uma, mostre de 2 a 3 combinações típicas «verbo + preposição» em frases simples. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Imperativos",
-      "question": "Como são formadas as formas imperativas dos verbos em hebraico para todas as pessoas e números? Explique as regras nos binyanim, forneça exemplos no singular e plural, masculino e feminino. Inclua também as formas informais comuns usadas na fala cotidiana."
+      "question": "Explique brevemente como se formam as formas imperativas nos principais binyanim para masculino/feminino e singular/plural. Dê de 8 a 10 exemplos frequentes de imperativos usados na língua falada. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Nikudot",
-      "question": "Explique detalhadamente o que são os nikudot (pontos vocálicos, נקודות) no hebraico. Quais tipos existem, como são classificados e onde são colocados em relação às letras? Como afetam a pronúncia, a gramática e o significado das palavras? Forneça uma lista dos principais nikudot com seus nomes, pronúncia, transliteração e exemplos de palavras com tradução."
+      "question": "Explique brevemente o que são os nikudot (pontos vocálicos) em hebraico e por que são importantes. Apresente os principais nikudot com pronúncia aproximada e dê 1 ou 2 exemplos de palavras para cada um. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Pronomes",
-      "question": "Liste todos os pronomes pessoais, possessivos, demonstrativos e reflexivos em hebraico. Forneça exemplos de uso em frases."
+      "question": "Faça uma lista curta dos principais pronomes em hebraico: pessoais, possessivos e demonstrativos. Mostre como variam em gênero e número e dê 1 ou 2 frases de exemplo para cada grupo. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Verbos modais",
-      "question": "Quais verbos modais são usados no hebraico, como são combinados com outros verbos e quais formas são usadas? Forneça exemplos."
+      "question": "Liste brevemente os verbos e expressões modais mais importantes em hebraico (poder, querer, precisar, dever, etc.) e mostre como se combinam com infinitivos ou formas de futuro. Dê 1 ou 2 exemplos para cada um e explique rapidamente as diferenças de sentido. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Palavras modais",
-      "question": "Dê uma lista de palavras introdutórias, partículas, advérbios e predicativos em hebraico semelhantes a: \"claro\", \"exatamente\", \"certo\", \"realmente\", \"talvez\", \"provavelmente\", \"possivelmente\", etc. Divida-as em grupos (palavras de certeza/confirmação, de suposição/incerteza, de avaliação/atitude, partículas intensificadoras na linguagem falada, advérbios de certeza/dúvida). Use estes exemplos em hebraico (sem vogais):\n\nPalavras de certeza/confirmação:\nבידאי, ללא ספק, לא פחות, בלי ספק, אמנם, בטבע הדברים, מובן מאליו, מאליו, נכון, באמת, בדיוק, נכון, בהחלט, בטח\n\nPalavras de suposição/incerteza:\nאפשר, כנראה, סביר, נראה, אולי, יתכן, ברור, כמובן, כנראה, צריך להיות\n\nPalavras de avaliação/atitude:\nלמזל, לצערנו, להפליא, לצערי, דרך אגב, בכלל, למעשה, העיקר, בקצרה, למעשה, בפירוש\n\nPartículas intensificadoras (fala coloquial):\nכן, כן כן, אהה, בדיוק בדיוק, עוד מה, איך לא, זה כלום\n\nSe necessário, adicione variantes coloquiais: בטח (claro), באמת? (sério?).\n\nPara cada palavra, dê uma frase curta em hebraico com tradução para o russo."
+      "question": "Prepare uma pequena lista de palavras e expressões modais em hebraico que expressem certeza, dúvida e atitude (por exemplo בידאי, ללא ספק, כנראה, אולי, ברור, כמובן, etc.). Para cada uma, dê uma frase simples de exemplo. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Fala",
-      "question": "Liste verbos hebraicos relacionados à fala (por exemplo: לדבר, לומר, לספר, להגיד, לשוחח), com tradução em português, transliteração, exemplos de frases e as preposições usadas com eles. Explique as diferenças entre verbos semelhantes."
+      "question": "Faça uma lista curta de verbos hebraicos ligados à fala (לדבר, לומר, לספר, להגיד, לשאול, etc.). Para cada verbo, forneça tradução em português, transliteração, 1 ou 2 frases de exemplo e um comentário curto sobre a diferença em relação a verbos semelhantes. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Visão",
-      "question": "Liste verbos hebraicos relacionados à visão (por exemplo: לראות, להביט, לצפות, להסתכל, להבחין), com tradução em português, transliteração, frases de exemplo e preposições utilizadas. Explique as diferenças entre os verbos semelhantes."
+      "question": "Faça uma lista curta de verbos hebraicos ligados à visão (לראות, להסתכל, להביט, לצפות, להבחין, etc.) com tradução e transliteração. Dê 1 ou 2 exemplos para cada um e explique brevemente a diferença entre «ver», «olhar», «observar», etc. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     },
     {
       "label": "Audição",
-      "question": "Liste verbos hebraicos relacionados à audição (por exemplo: לשמוע, להקשיב, להאזין), com tradução em português, transliteração, frases de exemplo e preposições usadas. Explique as diferenças entre verbos semelhantes."
+      "question": "Faça uma lista curta de verbos hebraicos ligados à audição (לשמוע, להקשיב, להאזין, etc.) com tradução e transliteração. Dê 1 ou 2 exemplos para cada verbo e explique rapidamente as diferenças de atenção e registro. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
+    },
+    {
+      "label": "Smikhut / Estado construto",
+      "question": "Explique brevemente o que é o estado construto (smikhut, סמיכות) em hebraico e para que ele serve. Dê de 6 a 8 exemplos frequentes de construções «substantivo no estado construto + substantivo que o especifica» com traduções claras. Em todos os exemplos, indique sempre a forma em hebraico, a transliteração e a tradução para o português."
     }
   ],
   "العربية": [
     {
       "label": "البِنيانيم",
-      "question": "اشرح ما هي البنيانيم في اللغة العبرية. قدم شرحاً مفصلاً عن البنيانيم: PAAL وPIEL وNIFAL وHIFIL وHITPAEL — كيف نميز بينها، وما هي خصائص كل منها ومتى تُستخدم. اعطِ 7 أمثلة لأفعال من كل بنيان."
+      "question": "اشرح باختصار ما هي البِنيانيم في العبرية (PAAL, PIEL, NIFAL, HIFIL, HITPAEL)، ومعانيها الأساسية وأنماط التشكيل الأكثر شيوعاً. أعطِ من 5 إلى 7 أفعال نموذجية لكل بنيان. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي (transliteration)، والترجمة إلى العربية."
     },
     {
       "label": "الجذور",
-      "question": "ما هو جذر الفعل في العبرية، كيف يؤثر على معنى الفعل وكيف يتم التعرف عليه؟ قدم أمثلة لكلمات وأفعال مرتبطة من بنيانات مختلفة."
+      "question": "اشرح في جمل قليلة ما هو جذر الفعل (shoresh, שורש) في العبرية وكيف يساعد على فهم معنى الكلمات وعائلات الكلمات. بيِّن في 8–10 أمثلة كيف نحدِّد الجذر في الأفعال وكيف يتغيّر المعنى بحسب البنيان. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "تصريف الأفعال",
-      "question": "اذكر وفسر بالتفصيل القواعد الأساسية لتصريف الأفعال في اللغة العبرية في الأزمنة الحاضر والماضي والمستقبل. وضّح خصائص التصريف لجميع الأشخاص، وللجنسين (المذكر والمؤنث)، وللمفرد والجمع. قدم أمثلة لتصريف الأفعال من جميع البنيان الأساسية."
+      "question": "قدِّم لمحة سريعة عن تصريف الأفعال في العبرية في الأزمنة الحاضر والماضي والمستقبل لجميع الأشخاص، ولجنسَي المذكر والمؤنث، وللمفرد والجمع. أعطِ جدولاً صغيراً أو مجموعة أمثلة لأفعال من بنيانات مختلفة. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
-      "label": "المصدر",
-      "question": "ما هو المصدر في العبرية، كيف يتكون ومتى يُستخدم؟ قدم عدة أمثلة للمصادر من كل بنيان."
+      "label": "المصدر (اسم الفعل)",
+      "question": "اشرح باختصار ما هو المصدر (shem ha-po'al, שם הפועל) في العبرية وكيف يتكوَّن في البِنيانيم الرئيسية. اذكر أهم التراكيب التي يُستعمل فيها المصدر وأعطِ 6–8 أمثلة بسيطة. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "حروف الجر",
-      "question": "عدد حروف الجر الأساسية في العبرية، بما في ذلك الحروف المتصلة، وشرح استخدامها مع الأفعال مع أمثلة."
+      "question": "اذكر أهم حروف الجر في العبرية (بما فيها ب־، ل־، م־، כ־ وغيرها) مع معانيها الأساسية. لكل حرف جر، أعطِ 2–3 تراكيب نموذجية من نوع «فعل + حرف جر» في جمل بسيطة. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "صيغة الأمر",
-      "question": "كيف تُصاغ صيغ الأمر للأفعال في العبرية لجميع الأشخاص والأعداد؟ اشرح قواعد التكوين في البِنيان، وقدم أمثلة للمفرد والجمع، للمذكر والمؤنث. لا تنسَ تضمين الصيغ غير الرسمية الشائعة في الحديث اليومي."
+      "question": "اشرح باختصار كيف تُصاغ صيغ الأمر في البِنيانيم الرئيسية للأفعال، للمذكر والمؤنث، وللمفرد والجمع. أعطِ 8–10 أمثلة شائعة لصيغ أمر من اللغة المحكية. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
-      "label": "النِقود",
-      "question": "اشرح بالتفصيل ما هي النقود (علامات التشكيل، נקודות) في اللغة العبرية. ما الأنواع الموجودة، وكيف تُصنَّف، وأين توضع بالنسبة للحروف؟ كيف تؤثر على النطق والمعنى والتحليل النحوي للكلمات؟ قدم قائمة بأهم علامات التشكيل مع أسمائها وطريقة نطقها وتَرجَمتها الصوتية وأمثلة على كلمات تحتوي عليها مع الترجمة."
+      "label": "النِقود (علامات التشكيل)",
+      "question": "اشرح باختصار ما هي علامات التشكيل (nikudot, נקודות) في العبرية ولماذا هي مهمة. اذكر أهم أنواعها مع نطق تقريبي، وأعطِ 1–2 أمثلة لكلمات على كل علامة. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "الضمائر",
-      "question": "اذكر جميع الضمائر الشخصية، والضمائر الملكية، والإشارية، والانعكاسية في اللغة العبرية، مع أمثلة على استخدامها في الجمل."
+      "question": "قدِّم قائمة قصيرة بأهم الضمائر في العبرية: الشخصية، وضمائر الملكية، وضمائر الإشارة. وضِّح كيف تتغيّر حسب الجنس والعدد، وأعطِ 1–2 جمل نموذجية لكل مجموعة. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "الأفعال الناقصة (المودالية)",
-      "question": "ما هي الأفعال الناقصة المستخدمة في اللغة العبرية؟ كيف تُستخدم مع الأفعال الأخرى؟ وما هي الصيغ المستخدمة؟ قدم أمثلة."
+      "question": "اذكر باختصار أهم الأفعال والتعابير المودالية في العبرية (مثل يستطيع، يريد، يجب، مسموح، إلخ)، وبيِّن كيف تُستعمل مع المصدر أو زمن المستقبل. أعطِ 1–2 أمثلة لكل فعل مع شرح قصير للفروق في المعنى. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "كلمات مودالية",
-      "question": "أعطِ قائمة بكلمات افتتاحية، وجزيئات، وظروف وأفعال حكم في العبرية مماثلة لـ: \"بالطبع\"، \"بالضبط\"، \"صحيح\"، \"حقاً\"، \"ربما\"، \"على الأرجح\"، \"ممكن\"، إلخ. قسمها إلى مجموعات (كلمات تأكيد/يقين، كلمات افتراض/عدم يقين، كلمات تقييم/موقف، جزيئات تعزيز في الكلام المحكي، ظروف يقين/شك). استخدم هذه الأمثلة بالعبرية (بدون حركات):\n\nكلمات اليقين / التأكيد:\nבידאי, ללא ספק, לא פחות, בלי ספק, אמנם, בטבע הדברים, מובן מאליו, מאליו, נכון, באמת, בדיוק, נכון, בהחלט, בטח\n\nكلمات الافتراض / عدم اليقين:\nאפשר, כנראה, سביר, נראה, אולי, يتכן, ברור, כמובן, כנראה, צריך להיות\n\nكلمات التقييم / الموقف:\nלמזל, לצערנו, להפליא, לצערי, דרך אגב, בכלל, למעשה, העיקר, بكצרה, למעשה, בפירוש\n\nجزيئات التعزيز (الكلام المحكي):\nכן, כן כן, אהה, בדיוק בדיוק, עוד מה, איך לא, זה כלום\n\nإذا لزم الأمر، أضف تعبيرات عامية: בטח (بالتأكيد)، באמת? (حقاً؟).\n\nلكل كلمة، أعطِ جملة قصيرة بالعبرية مع ترجمة روسية."
+      "question": "أعطِ قائمة صغيرة بكلمات وتعابير مودالية في العبرية تعبِّر عن اليقين، والشك، والموقف (مثل בידאי, ללא ספק, כנראה, אולי, ברור, כמובן وغيرها). لكل كلمة، أعطِ جملة بسيطة كمثال. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "الكلام",
-      "question": "اذكر أفعالًا عبرية تتعلق بالكلام (مثل לדבר، לומר، לספר، להגיד، לשוחח)، مع الترجمة إلى العربية، والنقل الصوتي، وأمثلة في جمل، وحروف الجر المستخدمة معها. فسّر الفروقات بين الأفعال المتشابهة."
+      "question": "أعطِ قائمة قصيرة بأهم أفعال الكلام في العبرية (לדבר, לומר, לספר, להגיד, לשאול, إلخ). لكل فعل، اذكر الترجمة إلى العربية، والنقل الصوتي، و1–2 جمل مثال، مع تعليق قصير على الفرق بينه وبين الأفعال المتقاربة. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "الرؤية",
-      "question": "أعطِ قائمة بأفعال عبرية مرتبطة بالرؤية (مثل: לראות, להביט, לצפות, להסתכל, להבחין)، مع الترجمة إلى العربية، والنقل الصوتي، وأمثلة على الاستخدام، وحروف الجر المستخدمة. وضّح الفروقات بين الأفعال المتشابهة."
+      "question": "أعطِ قائمة قصيرة بأفعال الرؤية في العبرية (לראות, להסתכל, להביט, לצפות, להבחין, إلخ) مع الترجمة والنقل الصوتي. لكل فعل، أعطِ 1–2 مثالاً وبيِّن باختصار الفرق بين «يرى»، «ينظر»، «يراقب»… إلخ. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     },
     {
       "label": "السمع",
-      "question": "أعطِ قائمة بأفعال عبرية مرتبطة بالسمع (مثل: לשמוע, להקשיב, להאזין)، مع الترجمة إلى العربية، والنقل الصوتي، وأمثلة على الاستخدام، وحروف الجر المستخدمة. وضّح الفروقات بين الأفعال المتشابهة."
+      "question": "أعطِ قائمة قصيرة بأفعال السمع في العبرية (לשמוע, להקשיב, להאזין, إلخ) مع الترجمة والنقل الصوتي. لكل فعل، أعطِ 1–2 مثالاً واشرح بشكل موجز الفروق في درجة الانتباه والرسمية. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
+    },
+    {
+      "label": "السميخوت (حالة الإضافة)",
+      "question": "اشرح باختصار ما هي السميخوت (smikhut, סמיכות) في العبرية ولماذا تُستعمل. أعطِ 6–8 أمثلة شائعة لتراكيب من نوع «اسم في حالة الإضافة + اسم يحدِّده» مع ترجمة واضحة. في جميع الأمثلة، اذكر دائماً الصيغة بالعبرية، والنقل الصوتي، والترجمة إلى العربية."
     }
   ],
   "አማርኛ": [
     {
       "label": "ቢንያኒም",
-      "question": "ቢንያኒም በዕብራይስጥ ቋንቋ ምን እንደሆኑ አስረዳ። PAAL፣ PIEL፣ NIFAL፣ HIFIL እና HITPAEL ቢንያኒምን በዝርዝር አስረዳ፤ እያንዳንዳቸውን እንዴት እንደሚለዩ፣ ዋና ባህሪያቸው ምን እንደሆኑ እና መቼ እንደሚጠቀሙ አስረዳ። ለእያንዳንዱ ቢንያን 7 የሚሆኑ ምሳሌዎች የግስ ቃላት አሳየኝ።"
+      "question": "ቢንያኒም በዕብራይስጥ (PAAL, PIEL, NIFAL, HIFIL, HITPAEL) ምን እንደሆኑ እና ዋና ዋና ስሜታቸውን እና ተለመዱ የኒቁድ ንድፎቻቸውን በአጭር አስረዳ። ለእያንዳንዱ ቢንያን 5–7 የግስ ምሳሌዎች አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን (transliteration) እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "ሥር",
-      "question": "የዕብራይስጥ ግስ ሥር ምንድን ነው፣ በምን ይገልጻል እና እንዴት ማወቅ ይቻላል? ከተለያዩ ቢንያኖች የተነሱ ተዛማጅ ቃላትና ግሶችን አቀረብ።"
+      "question": "የግስ ሥር (shoresh, שורש) በዕብራይስጥ ምንድን እንደሆነ እና የቃላትን ትርጉም እና ቤተሰብ እንዴት እንደሚገልጽ በአጭር አስረዳ። በ8–10 ምሳሌዎች ውስጥ ሥርን እንዴት እንደሚለይ እና በቢንያኒም መተላለፋቸው ስሜታቸውን እንዴት እንደሚቀይር አሳይ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "የግስ መተያየብ",
-      "question": "በዕብራይስጥ ቋንቋ ዋና ዋና የግስ መተያየብ ህጎችን በዝርዝር አስረዳ። በአሁን፣ በአረፍተ ጊዜ እና በወደፊት ጊዜ ላይ ሁሉንም ሰዎች፣ ጾታ (ወንድና ሴት) እና ቁጥር (አንድና ብዙ) የሚመለከቱ በተለያዩ ቢንያኖች ላይ የግስ ምሳሌዎችን አቀርብ።"
+      "question": "በዕብራይስጥ ግሶች በአሁን፣ በያለፈና በወደፊት ጊዜ ለሁሉም ሰዎች፣ ጾታዎችና ቁጥሮች እንዴት እንደሚተያዩ በአጭር አብራር። ከተለያዩ ቢንያኒም የተመረጡ ግሶችን በመጠቀም ትንሽ ሰንጠረዦች ወይም እትም ምሳሌዎች አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
-      "label": "የመለኪያ ቃላት",
-      "question": "በዕብራይስጥ ቋንቋ ኢንፊኒቲቭ ምን ነው፣ እንዴት እንደሚነሳና መቼ እንደሚጠቀም አስረዳ። ለእያንዳንዱ ቢንያን አንዳንድ የኢንፊኒቲቭ ምሳሌዎችን አቀረብ።"
+      "label": "ኢንፊኒቲቭ",
+      "question": "ኢንፊኒቲቭ (shem ha-po'al, שם הפועל) በዕብራይስጥ ምን እንደሆነና በዋናዎቹ ቢንያኒም ውስጥ እንዴት እንደሚተከል በአጭር አስረዳ። በኢንፊኒቲቭ የሚጠቀሙትን ተለመዱ ግንዛቤዎች አሳይ እና 6–8 ቀላል ምሳሌዎች አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "ቅድመ ቃላት",
-      "question": "በዕብራይስጥ ቋንቋ ዋና ቅድመ ቃላትን ከሚገናኙ ቅድመ ቃላት ጋር በመያዝ አስረዳ፣ ከግሶች ጋር በመጠቀም ምሳሌዎችን አቀረብ።"
+      "question": "በዕብራይስጥ ዋና ቅድመ ቃላትን (ב־, ל־, מ־, כ־ ወዘተ) እና ዋና ስሜታቸውን በአጭር አዘጋጅ። ለእያንዳንዱ ቅድመ ቃል 2–3 የ«ግስ + ቅድመ ቃል» ምሳሌዎችን በቀላሉ አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "ትእዛዞች",
-      "question": "በዕብራይስጥ ቋንቋ የትእዛዝ ቅርጸ ግሶች ለሁሉም ሰዎችና ቁጥሮች እንዴት እንደሚቀመጡ? በቢንያን ውስጥ የመፍጠር ደንቦችን አስረዳ፣ በብቻና በብዙ ቁጥር፣ ለወንድና ሴት ምሳሌዎችን አቅርብ። በዕውቀት ውስጥ በተዘዋዋሪ ንግግር ውስጥ የሚጠቀሙ የተለመዱ የማይደነግጡ ቅርጾችን እንዲሁም አካትት።"
+      "question": "በዕብራይስጥ ቋንቋ ትእዛዝ (imperative) በዋና ቢንያኒም ለወንድ/ሴትና ለነጠላ/ብዙ ቁጥር እንዴት እንደሚመሠሩ በአጭር አስረዳ። 8–10 ተዘዋዋሪ የትእዛዝ ምሳሌዎች አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "ኒቁድ",
-      "question": "በዕብራይስጥ ቋንቋ ኒቁድ (የአናባሪ ምልክቶች, נקודות) ምን እንደሆነ በዝርዝር አስረዳ። ምን ዓይነቶች አሉ? እንዴት እንደሚደራድሩና በፊደላት ላይ እንዴት እንደሚቀመጡ? በንባብ፣ ሰዋሰው እና ትርጓሜ ላይ እንዴት ያሳድራሉ? ዋና ኒቁዶችን በስማቸው፣ በንባባቸው፣ በትርጉም እና በምሳሌዎች ማቅረብ ትችላለህ።"
+      "question": "ኒቁዶች (nikudot, נקודות) በዕብራይስጥ ምን እንደሆኑ እና ለምን እንደሚያስፈልጉ በአጭር አስረዳ። ዋና ኒቁዶችን ከቀላል ንባብ ጋር አስቀምጥ እና ለእያንዳንዱ 1–2 የቃል ምሳሌዎች አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
-      "label": "አባላዊ መለኪያዎች",
-      "question": "በዕብራይስጥ ቋንቋ ያሉትን ሁሉንም የግለሰብ፣ የባለቤትነት፣ የመጠቀሚያና የራስ መለኪያዎች ዝርዝር አቀርብ። በእንደምሳሌ ሐረጎች ውስጥ የሚጠቀሙባቸውን አሳይ።"
+      "label": "መለኪያ ቃላት",
+      "question": "ዋና ዋና የዕብራይስጥ መለኪያ (pronouns) ቃላትን – የግለሰብ፣ የባለቤትነት እና የጥሪ – በአጭር ዝርዝር አቀርብ። በጾታና በቁጥር እንዴት እንደሚለዩ አሳይ እና ለእያንዳንዱ ቡድን 1–2 የሐረግ ምሳሌዎች አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "ሞዳል ግሶች",
-      "question": "በዕብራይስጥ ቋንቋ የሚጠቀሙ ሞዳል ግሶች ምንድን ናቸው? ከሌሎች ግሶች ጋር እንዴት እንደሚያጣመሙ እና ምን ዓይነት ቅርጸት እንደሚጠቀሙ አሳይ።"
+      "question": "በዕብራይስጥ የሚጠቀሙ ዋና ሞዳል ግሶችን (ሊችል፣ መፈለግ፣ መገባት ወዘተ) በአጭር ዝርዝር አቀርብ። ከኢንፊኒቲቭ ወይም ከወደፊት ጊዜ ጋር እንዴት እንደሚጣመሙ አሳይ እና ለእያንዳንዱ 1–2 ምሳሌዎች አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "ሞዳል ቃላት",
-      "question": "በዕብራይስጥ ቋንቋ ከሚከተሉት ጋር ተመሳሳይ የመጀመሪያ ቃላት፣ ንዑስ ቃላት፣ ግስ ቃላት እና አብይ የሆኑ ቃላትን ዝርዝር አቀርብ፤ \"እሺ\", \"ትክክል\", \"እውነት\", \"ተወናበደ\", \"ምናልባት\", \"ምናልባት እንደሆነ\", \"አማካይ\" ወዘተ። ይህንን ቃላት በቡድኖች አካፍል (የእምነት / የማረጋገጫ ቃላት፣ የግምት / የመጠን ቃላት፣ የግምገማ / የቅርጸት ቃላት፣ በቋንቋ ተናጋሪ የሚያጠናክሩ ቃላት፣ የእምነት / የጥምረት ግስ ቃላት)। እነዚህን የዕብራይስጥ ምሳሌዎች (ያልተደራጀ):\n\nየእምነት / የማረጋገጫ ቃላት:\nבידאי, ללא ספק, לא פחות, בלי ספק, אמנם, בטבע הדברים, מובן מאליו, מאליו, נכון, באמת, בדיוק, נכון, בהחלט, בטח\n\nየግምት / የመጠን ቃላት:\nאפשר, כנראה, סביר, נראה, אולי, יתכן, ברור, כמובן, כנראה, צריך להיות\n\nየግምገማ / የቅርጸት ቃላት:\nלמזל, לצערנו, להפליא, לצערי, דרך אגב, בכלל, למעשה, העיקר, בקצרה, למעשה, בפירוש\n\nበቋንቋ ተናጋሪ የሚያጠናክሩ ቃላት:\nכן, כן כן, אהה, בדיוק בדיוק, עוד מה, איך לא, זה כלום\n\nከሚፈለግ በላይ የንግግር አቀባበሎች አካትት: בטח (እሺ), באמת? (እውነት?).\n\nለእያንዳንዱ ቃል በዕብራይስጥ አነጋገር ከሩሲያኛ ትርጉም ጋር ለማንኛውም ምሳሌ አቅርብ።"
+      "question": "እምነት፣ ጥርጣሬ እና አመለካከት የሚያሳዩ አጭር የዕብራይስጥ ሞዳል ቃላትን (በምሳሌ בידאי, ללא ספק, כנראה, אולי, ברור, כמובן ወዘተ) ዝርዝር አቀርብ። ለእያንዳንዱ ቃል አንድ ቀላል የሐረግ ምሳሌ ጻፍ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "ንግግር",
-      "question": "በንግግር የተያያዙ የዕብራይስጥ ግሶችን ዝርዝር አቀርብ (ለምሳሌ: לדבר፣ לומר፣ לספר፣ להגיד፣ לשוחח), በአማርኛ ትርጉም፣ ትርጓሜ፣ ከምሳሌዎች ጋር፣ እና ከሚጠቀሙባቸው ቅድመ ቃላት ጋር። ተመሳሳይ ግሶች መካከል ያሉ ልዩነቶችን አስረዳ።"
+      "question": "ከንግግር ጋር የተያያዙ ዋና የዕብራይስጥ ግሶችን (לדבר, לומר, לספר, להגיד, לשאול ወዘተ) አስቀምጥ። ለእያንዳንዱ ግስ የአማርኛ ትርጉም፣ ትርጓሜ እና 1–2 የሐረግ ምሳሌዎች አቀርብ፣ ከተመሳሳይ ግሶች ጋር ያለውን ልዩነት በአጭር ገልጻ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
       "label": "ራዕይ",
-      "question": "በራእይ ጋር የተያያዙ የዕብራይስጥ ግሶችን ዝርዝር አቀርብ (ለምሳሌ፡ לראות, להביט, לצפות, להסתכל, להבחין)፣ ከአማርኛ ትርጉም፣ ከትርጉም የተነሳ ምሳሌዎችና የሚጠቀመው ቅድመ ቃል። ተመሳሳይ ግሶች ባላቸው ልዩነት አስረዳ።"
+      "question": "ከራዕይ ጋር የተያያዙ ዋና የዕብራይስጥ ግሶችን (לראות, להסתכל, להביט, לצפות, להבחין ወዘተ) በአጭር ዝርዝር አቀርብ። ለእያንዳንዱ 1–2 የሐረግ ምሳሌዎችን አቀርብ እና በአጭር እንዴት እንደሚለዩ ገልጻ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
     },
     {
-      "label": "ስምንት",
-      "question": "ከስምት ጋር የተያያዙ የዕብራይስጥ ግሶችን ዝርዝር አቀርብ (ለምሳሌ፡ לשמוע, להקשיב, להאזין)፣ ከአማርኛ ትርጉም፣ ከትርጉም የተነሳ ምሳሌዎችና የሚጠቀመው ቅድመ ቃል። ተመሳሳይ ግሶች ባላቸው ልዩነት አስረዳ።"
+      "label": "መስማት",
+      "question": "ከመስማት ጋር የተያያዙ ዋና የዕብራይስጥ ግሶችን (לשמוע, להקשיב, להאזין ወዘተ) በአጭር ዝርዝር አቀርብ። ለእያንዳንዱ 1–2 የሐረግ ምሳሌዎች አቀርብ እና በትኩረትና በመመዘኛ ደረጃ ያለውን ልዩነት በአጭር ገልጻ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
+    },
+    {
+      "label": "ስሚኩት",
+      "question": "ስሚኩት (smikhut, סמיכות) በዕብራይስጥ ምን እንደሆነና ለምን እንደሚጠቀም በአጭር አስረዳ። የ«የመጀመሪያ ስም በስሚኩት + የሚያበረክት ሁለተኛ ስም» 6–8 ተዘዋዋሪ ምሳሌዎች ከግልጽ ትርጉም ጋር አቀርብ። በሁሉም ምሳሌዎች ውስጥ የዕብራይስጥ ቅርጹን፣ ትርጓሜን እና ወደ አማርኛ ትርጉሙን ሁልጊዜ ግለጽ።"
+    }
+  ],
+  "עברית": [
+    {
+      "label": "בניינים",
+      "question": "הסבר בקצרה מה הם הבניינים בעברית (פעל, פיעל, נפעל, הפעיל, התפעל), מה המשמעות הכללית של כל בניין ומה הדגמים הנפוצים ביותר של ניקוד. הבא 5–7 פעלים נפוצים מכל בניין. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "שורשים",
+      "question": "הסבר בקצרה מהו שורש בעברית וכיצד הוא עוזר להבין את משמעות המילה ואת משפחת המילים. הראה ב-8–10 דוגמאות איך לזהות את השורש בפעלים ואיך משתנה המשמעות בין בניינים. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "נטיית פעלים",
+      "question": "תן סקירה קצרה של נטיית פעלים בעברית בזמן הווה, עבר ועתיד לכל הגופים, המינים והמספרים. הבא טבלה קטנה או סט דוגמאות עבור כמה פעלים מבניינים שונים. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "שם הפועל",
+      "question": "הסבר בקצרה מהו שם הפועל בעברית ואיך הוא נוצר בבניינים העיקריים. הראה את הצירופים הנפוצים עם שם הפועל (למשל אחרי פעלים מודאליים ומילות יחס) ותן 6–8 דוגמאות פשוטות. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "מילות יחס",
+      "question": "ערוך רשימה קצרה של מילות היחס החשובות בעברית, כולל ב־, ל־, מ־, כ־ וכו׳, עם המשמעות העיקרית של כל אחת. עבור כל מילת יחס הבא 2–3 צירופים טיפוסיים של «פועל + מילת יחס» במשפטים פשוטים. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "ציווי",
+      "question": "הסבר בקצרה איך בונים צורות ציווי בבניינים העיקריים, לזכר/נקבה וליחיד/רבים. הבא 8–10 דוגמאות של ציווי נפוץ בעברית מדוברת. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "ניקוד",
+      "question": "הסבר בקצרה מהו הניקוד בעברית ולמה הוא חשוב. הצג את סימני הניקוד העיקריים עם שם, תיאור קצר של ההגייה ודוגמה או שתיים של מילים לכל סימן. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "כינויי גוף",
+      "question": "ערוך רשימה קצרה של כינויי הגוף העיקריים בעברית: כינויי גוף, כינויי שייכות וכינויי רמז. הראה איך הם משתנים לפי מין ומספר והבא 1–2 דוגמאות לכל קבוצה. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "פעלים מודאליים",
+      "question": "ערוך רשימה קצרה של פעלים וביטויים מודאליים נפוצים בעברית (למשל אפשר, צריך, מותר, חייב, רוצה וכו׳) והסבר איך הם מתחברים לשם הפועל או לעתיד. הבא 1–2 דוגמאות לכל אחד עם הערה קצרה על ההבדל במשמעות. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "מילים מודאליות",
+      "question": "ערוך רשימה קצרה של מילים מודאליות וביטויים פתיחים בעברית שמבטאים ודאות, ספק ועמדה (כמו בידאי, ללא ספק, כנראה, אולי, ברור, כמובן ועוד). עבור כל מילה כתוב משפט אחד פשוט כדוגמה. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "פעלים של דיבור",
+      "question": "ערוך רשימה קצרה של פעלים עיקריים של דיבור בעברית (לדבר, לומר, לספר, להגיד, לשאול וכו׳). עבור כל פועל, ציין תרגום קצר, תעתיק לטיני ו-1–2 משפטי דוגמה, והסבר בקצרה במה הוא שונה מפעלים קרובים. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "פעלים של ראייה",
+      "question": "ערוך רשימה קצרה של פעלים של ראייה בעברית (לראות, להסתכל, להביט, לצפות, להבחין וכו׳) עם תרגום קצר ותעתיק. עבור כל אחד הבא 1–2 דוגמאות והסבר בקצרה את ההבדל בין «לראות», «להסתכל», «להתבונן» וכן הלאה. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "פעלים של שמיעה",
+      "question": "ערוך רשימה קצרה של פעלים של שמיעה בעברית (לשמוע, להקשיב, להאזין וכו׳) עם תרגום קצר ותעתיק. עבור כל פועל הבא 1–2 משפטי דוגמה והסבר בקצרה את ההבדל ברמת הקשב והסגנון. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
+    },
+    {
+      "label": "סמיכות",
+      "question": "הסבר בקצרה מהי סמיכות בעברית ומה הרעיון הבסיסי שלה. הבא 6–8 דוגמאות נפוצות של צירופי סמיכות («שם עצם נסמך + שם עצם ראש») עם פירוש ברור. בכל הדוגמאות כתוב תמיד את הצורה בעברית, תעתיק לטיני ותרגום או הסבר בעברית פשוטה."
     }
   ]
 }
