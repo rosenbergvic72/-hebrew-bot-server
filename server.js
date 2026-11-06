@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const { createHash } = require('node:crypto');
 require('dotenv').config();
 
 const app = express();
@@ -22,7 +23,7 @@ Hebrew Tutor Assistant — Help users learn the Hebrew language and grammar, esp
 - Do not end answers with meta-comments like "If you want, I can continue" or "Let me know if you’d like more examples". Give a complete, compact answer for the current question and stop.
 
 # Instructions
-- Always reply in the user's language as detected from their last message: English, Russian, French, Spanish, Portuguese, Arabic, or Amharic.
+- Always follow TARGET LANGUAGE when provided. Otherwise reply in the user's language as detected from their last message: English, Russian, French, Spanish, Portuguese, Arabic, or Amharic.
 - Never reply fully in Hebrew unless the user's message is in Hebrew.
 - If a user sends only one Hebrew word (e.g., an infinitive or a verb form) but the chat language is another supported language, reply entirely in the chat language. Use Hebrew only for the word itself, its forms, and examples; do not use Hebrew for explanations unless the last message is in Hebrew.
 - Default: Hebrew text must be written without nikud (vowel marks) unless specifically requested or when discussing vowels/pronunciation.
@@ -81,7 +82,7 @@ Then a blank line, and the next example in the same format.
 Explain in the user's language, provide a close Hebrew equivalent (Hebrew + transliteration + meaning), or a literal translation if no equivalent exists.
 
 # Language Detection
-- The primary response language must match that of the last user message.
+- The primary response language must match TARGET LANGUAGE when provided; otherwise use the last user message.
 - Single-word Hebrew input rule: when the last user message is a single Hebrew token but the chat is in another supported language, respond entirely in that language; use Hebrew only for the word and forms.
 - If Amharic script is detected, reply in Amharic (never Hebrew in explanations).
 - If unclear, ask for clarification once, very briefly.
@@ -124,7 +125,7 @@ function scriptCounts(str = '') {
     he: (str.match(/[\u0590-\u05FF]/g) || []).length,
     ru: (str.match(/[А-Яа-яЁё]/g) || []).length,
     ar: (str.match(/[اأإآء-ي]/g) || []).length,
-    am: (str.match(/[ዐ-፟]/g) || []).length,
+    am: (str.match(/[\u1200-\u137F]/g) || []).length,
     lat: (str.match(/[A-Za-z]/g) || []).length,
   };
 }
@@ -145,6 +146,10 @@ function detectLangLabelMixed(str = '') {
   if (ar > 0 && he === 0 && lat === 0 && ru === 0 && am === 0) return 'Arabic';
   if (am > 0 && he === 0 && lat === 0 && ru === 0 && ar === 0) return 'Amharic';
 
+  if (ru > 0 && ru >= lat && ru >= he) return 'Russian';
+  if (ar > 0 && ar >= lat && ar >= he) return 'Arabic';
+  if (am > 0 && am >= lat && am >= he) return 'Amharic';
+
   // Mixed cases with Latin present → choose Latin language by stopwords (prefer EN)
   if (lat > 0) {
     if (EN_SW.test(s)) return 'English';
@@ -157,6 +162,7 @@ function detectLangLabelMixed(str = '') {
 
   // No Latin, mixed among others → choose the dominant count
   const max = Math.max(he, ru, ar, am);
+  if (max === 0) return null;
   if (max === he) return 'Hebrew';
   if (max === ru) return 'Russian';
   if (max === ar) return 'Arabic';
@@ -197,7 +203,7 @@ function hasDiacritics(text = '') {
 function looksLikeLanguage(text = '', target = 'English') {
   if (target === 'Russian') return /[А-Яа-яЁё]/.test(text);
   if (target === 'Arabic') return /[اأإآء-ي]/.test(text);
-  if (target === 'Amharic') return /[ዐ-፟]/.test(text);
+  if (target === 'Amharic') return /[\u1200-\u137F]/.test(text);
   if (target === 'Hebrew') return /[\u0590-\u05FF]/.test(text);
   if (target === 'French') return FR_SW.test(text);
   if (target === 'Spanish') return ES_SW.test(text);
@@ -208,16 +214,12 @@ function looksLikeLanguage(text = '', target = 'English') {
 function containsForbiddenForTarget(text = '', target = 'English') {
   const hasAra = /[اأإآء-ي]/.test(text);
   const hasCyr = /[А-Яа-яЁё]/.test(text);
-  const hasAmh = /[ዐ-፟]/.test(text);
+  const hasAmh = /[\u1200-\u137F]/.test(text);
 
   if (target !== 'Arabic' && hasAra) return true;
   if (target !== 'Russian' && hasCyr) return true;
   if (target !== 'Amharic' && hasAmh) return true;
 
-  if (target === 'English') {
-    if (hasDiacritics(text)) return true;
-    if (FR_SW.test(text) || ES_SW.test(text) || PT_SW.test(text)) return true;
-  }
   return false;
 }
 
@@ -229,10 +231,10 @@ setInterval(() => {
 
 /* ========================= ROUTE ========================= */
 app.post('/ask', async (req, res) => {
-  console.log('📥 Получен запрос от клиента:', req.body);
+  console.log('📥 Получен запрос /ask');
 
   const { question, history = [], verbContext = '', chatLang } = req.body || {};
-  if (!question) {
+  if (typeof question !== 'string' || !question.trim()) {
     console.warn('⚠️ Вопрос не передан!');
     return res.status(400).json({ reply: 'Вопрос не передан' });
   }
@@ -244,21 +246,15 @@ app.post('/ask', async (req, res) => {
   ];
   const isConfirmation = yesWords.includes(normalized);
 
-  const cacheKey = isConfirmation
-    ? `CONFIRM:${String(verbContext || '').toLowerCase()}`
-    : normalized;
-
-  const skipCache = isConfirmation;
-  if (!skipCache && cache.has(cacheKey)) {
-    console.log(`💾 Ответ из кеша [key: ${cacheKey}]`);
-    return res.json({ reply: cache.get(cacheKey) });
-  }
 
   try {
     console.log('🔗 Отправка запроса в OpenAI...');
     console.log('📦 Используем модель:', model);
 
-    const trimmedHistory = Array.isArray(history) ? history.slice(-10) : [];
+    const trimmedHistory = Array.isArray(history)
+      ? history.filter((m) => m && ['user', 'assistant'].includes(m.role)
+          && typeof m.content === 'string' && m.content.trim()).slice(-10)
+      : [];
     let updatedHistory = [...trimmedHistory];
 
     if (isConfirmation && verbContext) {
@@ -267,7 +263,7 @@ app.post('/ask', async (req, res) => {
     }
 
     // 1) explicit lang from client
-    let L = LANG_MAP?.[String(chatLang || '').toLowerCase()] || null;
+    let L = LANG_MAP?.[String(chatLang || '').trim().toLowerCase().replace(/_/g, '-').split('-')[0]] || null;
 
     // 2) auto-detect with robust mixed-text logic
     const sourceForLang = isConfirmation && verbContext ? String(verbContext) : String(question);
@@ -276,12 +272,26 @@ app.post('/ask', async (req, res) => {
     if (!L) {
       L = singleHebrew
         ? detectChatLanguageFromHistory(updatedHistory, 'English') // “one Hebrew word” → use chat language
-        : detectLangLabelMixed(sourceForLang);
+        : (detectLangLabelMixed(sourceForLang) || 'English');
     }
 
     // Safety: if model guessed Hebrew but message is mixed with strong English markers → force English
-    if (L === 'Hebrew' && /[A-Za-z]/.test(sourceForLang) && EN_SW.test(sourceForLang)) {
+    if (!chatLang && L === 'Hebrew' && /[A-Za-z]/.test(sourceForLang) && EN_SW.test(sourceForLang)) {
       L = 'English';
+    }
+
+    // Cache is scoped to the resolved language and the exact conversation.
+    const cacheKey = createHash('sha256').update(JSON.stringify({
+      language: L,
+      question: question.trim(),
+      history: updatedHistory,
+      verbContext: String(verbContext || ''),
+      model,
+    })).digest('hex');
+    const skipCache = isConfirmation;
+    if (!skipCache && cache.has(cacheKey)) {
+      console.log(`💾 Ответ из кеша (lang = ${L})`);
+      return res.json({ reply: cache.get(cacheKey) });
     }
 
     const languageLockMsg = {
@@ -333,9 +343,7 @@ app.post('/ask', async (req, res) => {
           content:
             `You are a careful editor. Rewrite the assistant draft STRICTLY in ${L}. ` +
             `Allowed exceptions: Hebrew words for the target verb and its forms (bold) and transliteration (italics). ` +
-            (L === 'English'
-              ? 'Do NOT use any Portuguese, Spanish or French function words or diacritics (for example: o, a, os, as, de, que, é; el, la, los, las; le, la, les, des). '
-              : `Do NOT use any words from other languages than ${L} in explanations. `) +
+            `Use ${L} for all explanations. Preserve Hebrew examples and their transliteration. ` +
             'Keep the original structure and Markdown formatting.',
         },
         { role: 'user', content: `Rewrite entirely in ${L}:\n\n${reply}` },
@@ -346,7 +354,7 @@ app.post('/ask', async (req, res) => {
         {
           model,
           messages: rewriteMessages,
-          reasoning_effort: 'minimal',
+          reasoning_effort: 'low',
           verbosity: 'low',
         },
         {
@@ -377,7 +385,7 @@ app.post('/ask', async (req, res) => {
           {
             model,
             messages: translateMessages,
-            reasoning_effort: 'minimal',
+            reasoning_effort: 'low',
             verbosity: 'low',
           },
           {
@@ -396,7 +404,10 @@ app.post('/ask', async (req, res) => {
       return res.status(500).json({ reply: 'Пустой ответ от ChatGPT' });
     }
 
-    cache.set(cacheKey, reply);
+    if (!skipCache) {
+      if (cache.size >= 500) cache.delete(cache.keys().next().value);
+      cache.set(cacheKey, reply);
+    }
     console.log(`✅ Ответ получен от OpenAI (lang = ${L})`);
     return res.status(200).json({ reply });
   } catch (error) {
